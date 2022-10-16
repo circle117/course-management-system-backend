@@ -75,6 +75,38 @@
         <servlet-name>DeleteTeacherServlet</servlet-name>
         <servlet-class>pers.joy.web.DeleteTeacherServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>EditTeacherServlet</servlet-name>
+        <servlet-class>pers.joy.web.EditTeacherServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>GetCourseNameListServlet</servlet-name>
+        <servlet-class>pers.joy.web.GetCourseNameListServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>GetCompletedCourseStudentServlet</servlet-name>
+        <servlet-class>pers.joy.web.GetCompletedCourseStudentServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>GetSelectedCourseStudentServlet</servlet-name>
+        <servlet-class>pers.joy.web.GetSelectedCourseStudentServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>InputGradeServlet</servlet-name>
+        <servlet-class>pers.joy.web.InputGradeServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>GetCourseNameListForTeacherServlet</servlet-name>
+        <servlet-class>pers.joy.web.GetCourseNameListForTeacherServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>GetCompletedCourseStudentForTeacherServlet</servlet-name>
+        <servlet-class>pers.joy.web.GetCompletedCourseStudentForTeacherServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>GetSelectedCourseStudentForTeacherServlet</servlet-name>
+        <servlet-class>pers.joy.web.GetSelectedCourseStudentForTeacherServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SignInServlet</servlet-name>
         <url-pattern>/signIn</url-pattern>
@@ -146,5 +178,37 @@
     <servlet-mapping>
         <servlet-name>DeleteTeacherServlet</servlet-name>
         <url-pattern>/deleteTeacher</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditTeacherServlet</servlet-name>
+        <url-pattern>/editTeacher</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GetCourseNameListServlet</servlet-name>
+        <url-pattern>/getCourseNameList</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GetCompletedCourseStudentServlet</servlet-name>
+        <url-pattern>/getCompletedCourseStudent</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GetSelectedCourseStudentServlet</servlet-name>
+        <url-pattern>/getSelectedCourseStudent</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>InputGradeServlet</servlet-name>
+        <url-pattern>/inputGrade</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GetCourseNameListForTeacherServlet</servlet-name>
+        <url-pattern>/getCourseNameListForTeacher</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GetCompletedCourseStudentForTeacherServlet</servlet-name>
+        <url-pattern>/getCompletedCourseStudentForTeacher</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GetSelectedCourseStudentForTeacherServlet</servlet-name>
+        <url-pattern>/getSelectedCourseStudentForTeacher</url-pattern>
     </servlet-mapping>
 </web-app>

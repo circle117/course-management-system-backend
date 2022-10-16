@@ -48,4 +48,19 @@ public class TeacherDaoImpl extends BaseDao implements TeacherDao {
         String sql = "delete from teacher where no = ?";
         return update(sql, tNo);
     }
+
+    @Override
+    public int updateTeacher(String tNo, Map<String, String> editTeacher) {
+        String sql = "update teacher set %s where no = ?";
+        List<String> values = new ArrayList<>();
+        for(Map.Entry<String, String> entry: editTeacher.entrySet()) {
+            if (entry.getKey().equals("age")) {
+                values.add("age="+entry.getValue());
+            } else {
+                values.add(entry.getKey()+ "=\"" + entry.getValue()+"\"");
+            }
+        }
+        sql = String.format(sql, String.join(", ", values));
+        return update(sql, tNo);
+    }
 }

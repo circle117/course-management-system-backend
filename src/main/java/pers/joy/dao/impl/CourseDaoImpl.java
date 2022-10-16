@@ -15,25 +15,32 @@ public class CourseDaoImpl extends BaseDao implements CourseDao {
     private final Gson gson = new Gson();
     @Override
     public List<Course> queryCourseByCourseCode(String courseCode) {
-        String sql = "select `cCode`, `cName`, `credit`, `cDept`, `tName`, course.`tNo`" +
-                "from course inner join teacher on course.tNo = teacher.tNo where cCode like ?";
+        String sql = "select `cCode`, `cName`, `credit`, `cDept`, `name` as `tName`, course.`tNo`" +
+                "from course inner join teacher on course.tNo = teacher.no where cCode like ? " +
+                "order by cCode";
         courseCode = courseCode+'%';
         return queryForList(Course.class, sql, courseCode);
     }
 
     @Override
     public List<Course> querySelectedCourses(String sNo) {
-        String sql = "select course.`cCode`, `cName`, `credit`, `cDept`, `tName`, course.`tNo`" +
-                "from grade inner join course on grade.cCode=course.cCode " +
-                "inner join teacher on course.tNo=teacher.tNo " +
-                "where sNo = ? and grade is null";
+        String sql = "select course.`cCode`, `cName`, `credit`, `cDept`, `name` as `tName`, course.`tNo`" +
+                "from grade inner join course on grade.cCode=course.cCode and grade.tNo=course.tNo " +
+                "inner join teacher on course.tNo=teacher.no " +
+                "where sNo = ? and grade is null order by course.cCode";
         return queryForList(Course.class, sql, sNo);
     }
 
     @Override
     public List<Course> queryAllCourse() {
-        String sql = "select `cCode`, `cName`, `credit`, `cDept`, `tNo` from course";
+        String sql = "select `cCode`, `cName`, `credit`, `cDept`, `tNo` from course order by cCode, tNo";
         return queryForList(Course.class, sql);
+    }
+
+    @Override
+    public List<Object> queryCourseName() {
+        String sql = "select distinct `cName` from course order by cName";
+        return queryForColumnList(sql);
     }
 
     @Override
@@ -71,19 +78,18 @@ public class CourseDaoImpl extends BaseDao implements CourseDao {
     }
 
     @Override
-    public int updateCourse(Course oldCourse, Course newCourse) {
+    public int updateCourse(String cCode, Map<String, String> editCourse) {
         String sql = "update course set %s where cCode = ?";
-        Map<String, String> map = getChangedValues(oldCourse, newCourse);
-        List<String> valuesSql = new ArrayList<>();
-        for (Map.Entry<String, String> entry:map.entrySet()) {
-            if (entry.getKey().equals("credit") | entry.getValue().equals("null")) {
-                valuesSql.add("credit="+entry.getValue());
+        List<String> values = new ArrayList<>();
+        for (Map.Entry<String, String> entry: editCourse.entrySet()) {
+            if(entry.getKey().equals("credit")) {
+                values.add("credit="+entry.getValue());
             } else {
-                valuesSql.add(entry.getKey() + "=\"" + entry.getValue() + "\"");
+                values.add(entry.getKey()+"=\""+entry.getValue()+"\"");
             }
         }
-        sql = String.format(sql, String.join(", ", valuesSql));
-        return update(sql, newCourse.getCCode());
+        sql = String.format(sql, String.join(", ", values));
+        return update(sql, cCode);
     }
 
     @Override
@@ -138,24 +144,15 @@ public class CourseDaoImpl extends BaseDao implements CourseDao {
         return queryForList(Course.class, sql, courseCode, tNo);
     }
 
-    Map<String, String> getChangedValues(Course oldCourse, Course newCourse) {
-        Map<String, String> changedValues = new HashMap<>();
-        if (newCourse.getCName()==null){
-            changedValues.put("cName", "null");
-        }else if (oldCourse.getCName()==null | !oldCourse.getCName().equals(newCourse.getCName())) {
-            changedValues.put("cName", newCourse.getCName());
-        }
-        if (newCourse.getCredit()==0){
-            changedValues.put("cName", "null");
-        }else if (oldCourse.getCName()==null | oldCourse.getCredit()!=newCourse.getCredit()) {
-            changedValues.put("credit", String.valueOf(newCourse.getCredit()));
-        }
-        if (newCourse.getCName()==null){
-            changedValues.put("cName", "null");
-        }else if (oldCourse.getCName()==null | !oldCourse.getCDept().equals(newCourse.getCDept())) {
-            changedValues.put("cDept", newCourse.getCDept());
-        }
-        return changedValues;
+    @Override
+    public String queryCCodeByName(String cName) {
+        String sql = "select `cCode` from course where cName = ?";
+        return (String) queryForSingleValue(sql, cName);
     }
 
+    @Override
+    public List<Object> queryCourseNameListForTeacher(String tNo) {
+        String sql = "select `cName` from course where tNo = ? order by cName";
+        return queryForColumnList(sql, tNo);
+    }
 }

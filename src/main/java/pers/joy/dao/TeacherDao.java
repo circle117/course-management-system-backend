@@ -13,4 +13,6 @@ public interface TeacherDao {
     int insertTeacher(Map<String, String> teacher);
 
     int deleteTeacher(String tNo);
+
+    int updateTeacher(String tNo, Map<String, String> editTeacher);
 }

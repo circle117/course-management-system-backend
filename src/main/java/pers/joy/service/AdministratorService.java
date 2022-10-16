@@ -1,6 +1,7 @@
 package pers.joy.service;
 
 import pers.joy.entity.Course;
+import pers.joy.entity.SelectCourse;
 import pers.joy.entity.User;
 
 import java.util.List;
@@ -27,7 +28,7 @@ public interface AdministratorService extends UserService {
      */
     int deleteCourse(Course course);
 
-    int editCourse(Course oldCourse, Course newCourse);
+    int editCourse(String cCode, Map<String, String> editCourse);
 
     int addTeacher(String courseCode, List<String> teacherList);
 
@@ -40,4 +41,15 @@ public interface AdministratorService extends UserService {
     int createTeacher(Map<String, String> teacher);
 
     int deleteTeacher(String tNo);
+
+    int editTeacher(String tNo, Map<String, String> editTeacher);
+
+    // grade management
+    List<Object> getCourseNameList();
+
+    List<SelectCourse> getCompletedCourseStudent(String cName);
+
+    List<User> getSelectedCourseStudent(String cName);
+
+    int inputGrade(String sNo, String cName, String grade);
 }

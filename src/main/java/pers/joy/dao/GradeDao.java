@@ -2,6 +2,7 @@ package pers.joy.dao;
 
 import pers.joy.entity.Course;
 import pers.joy.entity.SelectCourse;
+import pers.joy.entity.User;
 
 import java.util.List;
 
@@ -25,4 +26,14 @@ public interface GradeDao {
      * @return list of courses with grade and point
      */
     List<SelectCourse> queryForCompletedCourses(String sNo);
+
+    List<SelectCourse> queryForCompletedCourseStudent(String cName);
+
+    List<User> queryForSelectedCourseStudent(String cName);
+
+    int updateGrade(String sNo, String cCode, String grade, String point);
+
+    List<SelectCourse> queryForCompletedCourseStudentForTeacher(String cName, String tNo);
+
+    List<User> queryForSelectedCourseStudentForTeacher(String cName, String tNo);
 }

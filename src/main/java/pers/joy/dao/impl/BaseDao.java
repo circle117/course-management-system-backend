@@ -3,6 +3,7 @@ package pers.joy.dao.impl;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
+import org.apache.commons.dbutils.handlers.ColumnListHandler;
 import org.apache.commons.dbutils.handlers.ScalarHandler;
 import pers.joy.utils.JdbcUtils;
 
@@ -19,7 +20,7 @@ public abstract class BaseDao {
      *
      * @return -1: fail, otherwise: affected row number
      */
-    public int update(String sql, Object... args) {
+    public int update(String sql, Object... args){
         Connection connection = JdbcUtils.getConnection();
         try {
             return queryRunner.update(connection, sql, args);
@@ -63,6 +64,19 @@ public abstract class BaseDao {
 
         try {
             return queryRunner.query(connection, sql, new ScalarHandler(), args);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            JdbcUtils.closeConnection(connection);
+        }
+
+        return null;
+    }
+
+    public List<Object> queryForColumnList(String sql, Object ... args){
+        Connection connection = JdbcUtils.getConnection();
+        try {
+            return queryRunner.query(connection, sql, new ColumnListHandler<>(), args);
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {

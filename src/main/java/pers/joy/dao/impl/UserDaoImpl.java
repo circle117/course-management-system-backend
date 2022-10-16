@@ -12,18 +12,15 @@ public class UserDaoImpl extends BaseDao implements UserDao {
 
     @Override
     public User queryUserByUsernameAndPassword(String type, String username, String password) {
-        String sql;
+        String sql = "";
         if (type.equals("student")) {
             sql = "select `no`, `name` from student where username = ? and password = ?";
         }
         else if (type.equals("teacher")) {
-            sql = "";
+            sql = "select `no`, `name` from teacher where username = ? and password = ?";
         }
         else if (type.equals("administrator")) {
             sql = "select `aNo` as `no`, `aName` as `name` from administrator where username = ? and password = ?";
-        }
-        else {
-            sql = "";
         }
         return queryForOne(User.class, sql, username, password);
     }

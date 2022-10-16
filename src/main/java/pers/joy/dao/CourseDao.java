@@ -13,11 +13,13 @@ public interface CourseDao {
 
     List<Course> queryAllCourse();
 
+    List<Object> queryCourseName();
+
     int insertCourse(Map<String, String> course);
 
     int deleteCourse(Course course);
 
-    int updateCourse(Course oldCourse, Course newCourse);
+    int updateCourse(String cCode, Map<String, String> editCourse);
 
     List<Course> existCourseCode(String courseCode);
 
@@ -30,4 +32,9 @@ public interface CourseDao {
     int insertTNo(Course courseInfo, List<String> teacherList);
 
     List<Course> existCourseAndTeacher(String courseCode, String tNo);
+
+    String queryCCodeByName(String cName);
+
+    List<Object> queryCourseNameListForTeacher(String tNo);
+
 }

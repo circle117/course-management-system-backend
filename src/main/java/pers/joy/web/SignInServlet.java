@@ -39,6 +39,10 @@ public class SignInServlet extends HttpServlet {
             map.put("signInStatus", "success");
             map.put("no", user.getNo());
             map.put("name", user.getName());
+        } else if (type.equals("teacher")) {
+            map.put("signInStatus", "success");
+            map.put("no", user.getNo());
+            map.put("name", user.getName());
         }
         response.getWriter().write(gson.toJson(map));
     }

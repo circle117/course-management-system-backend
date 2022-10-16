@@ -1,12 +1,15 @@
 package pers.joy.service.impl;
 
 import pers.joy.dao.CourseDao;
+import pers.joy.dao.GradeDao;
 import pers.joy.dao.StudentDao;
 import pers.joy.dao.TeacherDao;
 import pers.joy.dao.impl.CourseDaoImpl;
+import pers.joy.dao.impl.GradeDaoImpl;
 import pers.joy.dao.impl.StudentDaoImpl;
 import pers.joy.dao.impl.TeacherDaoImpl;
 import pers.joy.entity.Course;
+import pers.joy.entity.SelectCourse;
 import pers.joy.entity.User;
 import pers.joy.service.AdministratorService;
 
@@ -18,6 +21,7 @@ public class AdministratorServiceImpl extends UserServiceImpl implements Adminis
     private final TeacherDao teacherDao = new TeacherDaoImpl();
     private final CourseDao courseDao = new CourseDaoImpl();
     private final StudentDao studentDao = new StudentDaoImpl();
+    private final GradeDao gradeDao = new GradeDaoImpl();
 
     @Override
     public List<User> getTeacherList() {
@@ -49,8 +53,8 @@ public class AdministratorServiceImpl extends UserServiceImpl implements Adminis
     }
 
     @Override
-    public int editCourse(Course oldCourse, Course newCourse) {
-        return courseDao.updateCourse(oldCourse, newCourse);
+    public int editCourse(String cCode, Map<String, String> editCourse) {
+        return courseDao.updateCourse(cCode, editCourse);
     }
 
     @Override
@@ -96,5 +100,58 @@ public class AdministratorServiceImpl extends UserServiceImpl implements Adminis
     @Override
     public int deleteTeacher(String tNo) {
         return teacherDao.deleteTeacher(tNo);
+    }
+
+    @Override
+    public int editTeacher(String tNo, Map<String, String> editTeacher) {
+        return teacherDao.updateTeacher(tNo, editTeacher);
+    }
+
+    @Override
+    public List<Object> getCourseNameList() {
+        return courseDao.queryCourseName();
+    }
+
+    @Override
+    public List<SelectCourse> getCompletedCourseStudent(String cName) {
+        return gradeDao.queryForCompletedCourseStudent(cName);
+    }
+
+    @Override
+    public List<User> getSelectedCourseStudent(String cName) {
+        return gradeDao.queryForSelectedCourseStudent(cName);
+    }
+
+    @Override
+    public int inputGrade(String sNo, String cName, String grade) {
+        String cCode = courseDao.queryCCodeByName(cName);
+        String point = String.valueOf(getPoint(Integer.parseInt(grade)));
+        return gradeDao.updateGrade(sNo, cCode, grade, point);
+    }
+
+    private float getPoint(int grade) {
+        if (grade >= 90) {
+            return 4.0f;
+        } else if (grade>=85) {
+            return 3.7f;
+        } else if (grade>=82) {
+            return 3.3f;
+        } else if (grade>=78) {
+            return 3.0f;
+        } else if (grade>=75) {
+            return 2.7f;
+        } else if (grade>=72) {
+            return 2.3f;
+        } else if (grade>=68) {
+            return 2.0f;
+        } else if (grade>=66) {
+            return 1.7f;
+        } else if (grade>=64) {
+            return 1.5f;
+        } else if (grade>=60) {
+            return 1.0f;
+        } else {
+            return 0.0f;
+        }
     }
 }
