@@ -30,12 +30,13 @@ public class AddTeacherServlet extends HttpServlet {
             teacherList.add(gson.fromJson(jsonElement, String.class));
         }
 
-        int res = administratorService.addTeacher(courseCode, teacherList);
+        List<String> failTeacherNo = administratorService.addTeacher(courseCode, teacherList);
         Map<String, String> map = new HashMap<>();
-        if (res>0) {
-            map.put("Status", "success");
+        if (failTeacherNo.size()==0) {
+            map.put("status", "success");
         } else {
-            map.put("Status", "fail");
+            map.put("status", "fail");
+            map.put("failTeacherNo", gson.toJson(failTeacherNo));
         }
 
         response.setHeader("Access-Control-Allow-Origin", "http://localhost:8080");

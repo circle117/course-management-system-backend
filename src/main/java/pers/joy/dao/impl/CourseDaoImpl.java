@@ -1,12 +1,10 @@
 package pers.joy.dao.impl;
 
 import com.google.gson.Gson;
-import org.jetbrains.annotations.NotNull;
 import pers.joy.dao.CourseDao;
 import pers.joy.entity.Course;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -42,6 +40,8 @@ public class CourseDaoImpl extends BaseDao implements CourseDao {
         String sql = "select distinct `cName` from course order by cName";
         return queryForColumnList(sql);
     }
+
+
 
     @Override
     public int insertCourse(Map<String, String> course) {
@@ -99,9 +99,9 @@ public class CourseDaoImpl extends BaseDao implements CourseDao {
     }
 
     @Override
-    public List<Course> existNoTeacherCourse(String courseCode) {
+    public Course existNoTeacherCourse(String courseCode) {
         String sql = "select * from course where cCode = ? and tNo is null";
-        return queryForList(Course.class, sql, courseCode);
+        return queryForOne(Course.class, sql, courseCode);
     }
 
     @Override
@@ -117,7 +117,8 @@ public class CourseDaoImpl extends BaseDao implements CourseDao {
     }
 
     @Override
-    public int insertTNo(Course courseInfo, List<String> teacherList) {
+    public List<String> insertTNo(Course courseInfo, List<String> teacherList) {
+        List<String> failTeacherNo = new ArrayList<>();
         String sql = "insert into course values";
         List<String> values = new ArrayList<>();
         List<String> items = new ArrayList<>();
@@ -127,21 +128,24 @@ public class CourseDaoImpl extends BaseDao implements CourseDao {
         values.add("\""+courseInfo.getCDept()+"\"");
         values.add("\"%s\")");
         for (String tNo: teacherList) {
-            if (existCourseAndTeacher(courseInfo.getCCode(), tNo).size()==0) {
+            if (existCourseAndTeacher(courseInfo.getCCode(), tNo) == null) {
                 items.add(String.format(String.join(",", values), tNo));
+            } else {
+                failTeacherNo.add(tNo);
             }
         }
         if (items.size()==0) {
-            return -1;
+            return failTeacherNo;
         }
         sql = sql + String.join(", ", items);
-        return update(sql);
+        update(sql);
+        return failTeacherNo;
     }
 
     @Override
-    public List<Course> existCourseAndTeacher(String courseCode, String tNo) {
+    public Course existCourseAndTeacher(String courseCode, String tNo) {
         String sql = "select * from course where cCode = ? and tNo = ?";
-        return queryForList(Course.class, sql, courseCode, tNo);
+        return queryForOne(Course.class, sql, courseCode, tNo);
     }
 
     @Override

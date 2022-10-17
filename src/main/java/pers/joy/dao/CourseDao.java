@@ -23,15 +23,15 @@ public interface CourseDao {
 
     List<Course> existCourseCode(String courseCode);
 
-    List<Course> existNoTeacherCourse(String courseCode);
+    Course existNoTeacherCourse(String courseCode);
 
     int updateTNoForExistItem(String courseCode, String tNo);
 
     Course queryCourseInfo(String courseCode);
 
-    int insertTNo(Course courseInfo, List<String> teacherList);
+    List<String> insertTNo(Course courseInfo, List<String> teacherList);
 
-    List<Course> existCourseAndTeacher(String courseCode, String tNo);
+    Course existCourseAndTeacher(String courseCode, String tNo);
 
     String queryCCodeByName(String cName);
 

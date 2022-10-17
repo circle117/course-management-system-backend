@@ -14,23 +14,13 @@ public interface AdministratorService extends UserService {
 
     List<User> getStudentList();
 
-    /**
-     * create new course
-     * @param course
-     * @return failed course code
-     */
     int createCourse(Map<String, String> course);
 
-    /**
-     * delete course
-     * @param course
-     * @return
-     */
     int deleteCourse(Course course);
 
     int editCourse(String cCode, Map<String, String> editCourse);
 
-    int addTeacher(String courseCode, List<String> teacherList);
+    List<String> addTeacher(String courseCode, List<String> teacherList);
 
     int createStudent(Map<String, String> student);
 

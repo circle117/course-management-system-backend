@@ -13,6 +13,7 @@ import pers.joy.entity.SelectCourse;
 import pers.joy.entity.User;
 import pers.joy.service.AdministratorService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -58,23 +59,23 @@ public class AdministratorServiceImpl extends UserServiceImpl implements Adminis
     }
 
     @Override
-    public int addTeacher(String courseCode, List<String> teacherList) {
-        if (teacherList.size()==0) {
-            return -1;
-        }
-        int res = 0;
+    public List<String> addTeacher(String courseCode, List<String> teacherList) {
+        List<String> failTeacherNo = new ArrayList<>();
         // fill up the empty tNo
-        if (courseDao.existNoTeacherCourse(courseCode).size()>0) {
-            res += courseDao.updateTNoForExistItem(courseCode, teacherList.get(0));
+        if (courseDao.existNoTeacherCourse(courseCode) != null) {
+            int res = courseDao.updateTNoForExistItem(courseCode, teacherList.get(0));
+            if (res<=0) {
+                failTeacherNo.add(teacherList.get(0));
+            }
             teacherList.remove(0);
             if (teacherList.size()==0) {
-                return res;
+                return failTeacherNo;
             }
         }
         // add new items for other tNo
         Course courseInfo = courseDao.queryCourseInfo(courseCode);
-        res += courseDao.insertTNo(courseInfo, teacherList);
-        return res;
+        failTeacherNo.addAll(courseDao.insertTNo(courseInfo, teacherList));
+        return failTeacherNo;
     }
 
     @Override
