@@ -16,6 +16,12 @@ public class StudentServiceImpl extends UserServiceImpl implements StudentServic
 
     private final CourseDao courseDao = new CourseDaoImpl();
     private final GradeDao gradeDao = new GradeDaoImpl();
+
+    @Override
+    public List<Course> searchByCode(String courseCode) {
+        return courseDao.queryCourseByCourseCode(courseCode);
+    }
+
     @Override
     public List<Course> getSelectedCourses(String sNo) {
         return courseDao.querySelectedCourses(sNo);

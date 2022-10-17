@@ -6,6 +6,8 @@ import pers.joy.entity.SelectCourse;
 import java.util.List;
 
 public interface StudentService extends UserService{
+
+    List<Course> searchByCode(String courseCode);
     /**
      * get selected courses
      * @param sNo student number
