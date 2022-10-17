@@ -24,11 +24,7 @@ public class StudentDaoImpl extends UserDaoImpl implements StudentDao {
                 continue;
             }
             items.add(entry.getKey());
-            if (entry.getKey().equals("age")) {
-                values.add(entry.getValue());
-            } else {
-                values.add("\"" +entry.getValue()+"\"");
-            }
+            values.add("\"" +entry.getValue()+"\"");
         }
 
         return update(String.format(sql,
@@ -41,11 +37,7 @@ public class StudentDaoImpl extends UserDaoImpl implements StudentDao {
         String sql = "update student set %s where no = ?";
         List<String> values = new ArrayList<>();
         for (Map.Entry<String, String> entry: updateStudent.entrySet()) {
-            if (entry.getKey().equals("age")) {
-                values.add("age=" + entry.getValue());
-            } else {
-                values.add(entry.getKey() + "=\"" + entry.getValue() + "\"");
-            }
+            values.add(entry.getKey() + "=\"" + entry.getValue() + "\"");
         }
         sql = String.format(sql, String.join(", ", values));
         return update(sql, sNo);

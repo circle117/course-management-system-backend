@@ -8,7 +8,7 @@ public class User {
     private String name;
     private String department;
     private String gender;
-    private int age;
+    private String birthday;
     private String username;
     private String password;
 
@@ -30,7 +30,7 @@ public class User {
 
     public String getGender() { return gender; }
 
-    public int getAge() { return age; }
+    public String getBirthday() { return birthday; }
 
     public void setNo(String no) {
         this.no = no;
@@ -50,7 +50,7 @@ public class User {
 
     public void setGender(String gender) { this.gender = gender; }
 
-    public void setAge(int age) { this.age = age; }
+    public void setBirthday(String birthday) { this.birthday = birthday; }
 
     @Override
     public String toString() {
@@ -59,18 +59,18 @@ public class User {
                 ", name='" + name + '\'' +
                 ", department='" + department + '\'' +
                 ", gender='" + gender + '\'' +
-                ", age=" + age +
+                ", birthday=" + birthday +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 '}';
     }
 
-    public User(String no, String name, String department, String gender, int age, String username, String password) {
+    public User(String no, String name, String department, String gender, String birthday, String username, String password) {
         this.no = no;
         this.name = name;
         this.department = department;
         this.gender = gender;
-        this.age = age;
+        this.birthday = birthday;
         this.username = username;
         this.password = password;
     }

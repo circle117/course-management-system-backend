@@ -18,7 +18,7 @@ public class CreateStudentServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Map<String, String> student = new HashMap<>();
-        student = gson.fromJson(request.getParameter("editStudent"), student.getClass());
+        student = gson.fromJson(request.getParameter("newStudent"), student.getClass());
 
         Map<String, String> map = new HashMap<>();
         int res = administratorService.createStudent(student);

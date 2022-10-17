@@ -55,7 +55,11 @@ public class AdministratorServiceImpl extends UserServiceImpl implements Adminis
 
     @Override
     public int editCourse(String cCode, Map<String, String> editCourse) {
-        return courseDao.updateCourse(cCode, editCourse);
+        if (editCourse.size()==0) {
+            return -1;
+        } else {
+            return courseDao.updateCourse(cCode, editCourse);
+        }
     }
 
     @Override
@@ -85,7 +89,11 @@ public class AdministratorServiceImpl extends UserServiceImpl implements Adminis
 
     @Override
     public int editStudent(String sNo, Map<String, String> updateStudent) {
-        return studentDao.editStudent(sNo, updateStudent);
+        if (updateStudent.size()==0) {
+            return -1;
+        } else {
+            return studentDao.editStudent(sNo, updateStudent);
+        }
     }
 
     @Override
@@ -105,7 +113,11 @@ public class AdministratorServiceImpl extends UserServiceImpl implements Adminis
 
     @Override
     public int editTeacher(String tNo, Map<String, String> editTeacher) {
-        return teacherDao.updateTeacher(tNo, editTeacher);
+        if (editTeacher.size()==0) {
+            return -1;
+        } else {
+            return teacherDao.updateTeacher(tNo, editTeacher);
+        }
     }
 
     @Override

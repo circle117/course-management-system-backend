@@ -32,11 +32,7 @@ public class TeacherDaoImpl extends BaseDao implements TeacherDao {
                 continue;
             }
             items.add(entry.getKey());
-            if (entry.getKey().equals("age")) {
-                values.add(entry.getValue());
-            } else {
-                values.add("\""+entry.getValue()+"\"");
-            }
+            values.add("\""+entry.getValue()+"\"");
         }
         return update(String.format(sql,
                 String.join(", ", items),
