@@ -10,7 +10,6 @@ import java.util.Map;
 
 public class CourseDaoImpl extends BaseDao implements CourseDao {
 
-    private final Gson gson = new Gson();
     @Override
     public List<Course> queryCourseByCourseCode(String courseCode) {
         String sql = "select `cCode`, `cName`, `credit`, `cDept`, `name` as `tName`, course.`tNo`" +
@@ -21,7 +20,7 @@ public class CourseDaoImpl extends BaseDao implements CourseDao {
     }
 
     @Override
-    public List<Course> querySelectedCourses(String sNo) {
+    public List<Course> querySelectedCoursesBySNo(String sNo) {
         String sql = "select course.`cCode`, `cName`, `credit`, `cDept`, `name` as `tName`, course.`tNo`" +
                 "from grade inner join course on grade.cCode=course.cCode and grade.tNo=course.tNo " +
                 "inner join teacher on course.tNo=teacher.no " +
@@ -41,31 +40,15 @@ public class CourseDaoImpl extends BaseDao implements CourseDao {
         return queryForColumnList(sql);
     }
 
-
-
     @Override
-    public int insertCourse(Map<String, String> course) {
-        String sql = "insert into course(%s) values(%s)";
-        List<String> items = new ArrayList<>();
-        List<String> values = new ArrayList<>();
-        for (Map.Entry<String, String> entry: course.entrySet()) {
-            if (entry.getValue()==null) {
-                continue;
-            }
-            items.add(entry.getKey());
-            if (entry.getKey().equals("credit")) {
-                values.add(entry.getValue());
-            } else{
-                values.add("\"" + entry.getValue() + "\"");
-            }
-        }
-        return update(String.format(sql,
-                String.join(", ", items),
-                String.join(", ", values)));
+    public int insertCourse(Course course) {
+        String sql = "insert into course values(?, ?, ?, ?, ?)";
+        return update(sql,
+                course.getCCode(), course.getCName(), course.getCredit(), course.getCDept(), course.getTNo());
     }
 
     @Override
-    public int deleteCourse(Course course) {
+    public int deleteCourseByCCode(Course course) {
         String sql = "delete from course where cCode = ? and tNo ";
         if (course.getTNo()==null) {
             sql += "is null";
@@ -78,18 +61,10 @@ public class CourseDaoImpl extends BaseDao implements CourseDao {
     }
 
     @Override
-    public int updateCourse(String cCode, Map<String, String> editCourse) {
-        String sql = "update course set %s where cCode = ?";
-        List<String> values = new ArrayList<>();
-        for (Map.Entry<String, String> entry: editCourse.entrySet()) {
-            if(entry.getKey().equals("credit")) {
-                values.add("credit="+entry.getValue());
-            } else {
-                values.add(entry.getKey()+"=\""+entry.getValue()+"\"");
-            }
-        }
-        sql = String.format(sql, String.join(", ", values));
-        return update(sql, cCode);
+    public int updateCourse(Course course) {
+        String sql = "update course set cName=?, credit=?, cDept=? where cCode = ?";
+        return update(sql,
+                course.getCName(), course.getCredit(), course.getCDept(), course.getCCode());
     }
 
     @Override
@@ -111,39 +86,13 @@ public class CourseDaoImpl extends BaseDao implements CourseDao {
     }
 
     @Override
-    public Course queryCourseInfo(String courseCode) {
+    public Course queryCourseInfoByCCode(String courseCode) {
         String sql = "select cCode, cName, credit, cDept from course where cCode = ?";
         return queryForOne(Course.class, sql, courseCode);
     }
 
     @Override
-    public List<String> insertTNo(Course courseInfo, List<String> teacherList) {
-        List<String> failTeacherNo = new ArrayList<>();
-        String sql = "insert into course values";
-        List<String> values = new ArrayList<>();
-        List<String> items = new ArrayList<>();
-        values.add("(\""+courseInfo.getCCode()+"\"");
-        values.add("\""+courseInfo.getCName()+"\"");
-        values.add(String.valueOf(courseInfo.getCredit()));
-        values.add("\""+courseInfo.getCDept()+"\"");
-        values.add("\"%s\")");
-        for (String tNo: teacherList) {
-            if (existCourseAndTeacher(courseInfo.getCCode(), tNo) == null) {
-                items.add(String.format(String.join(",", values), tNo));
-            } else {
-                failTeacherNo.add(tNo);
-            }
-        }
-        if (items.size()==0) {
-            return failTeacherNo;
-        }
-        sql = sql + String.join(", ", items);
-        update(sql);
-        return failTeacherNo;
-    }
-
-    @Override
-    public Course existCourseAndTeacher(String courseCode, String tNo) {
+    public Course queryCourseByCCodeAndTNo(String courseCode, String tNo) {
         String sql = "select * from course where cCode = ? and tNo = ?";
         return queryForOne(Course.class, sql, courseCode, tNo);
     }

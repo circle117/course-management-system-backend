@@ -1,11 +1,14 @@
 package pers.joy.service;
 
 import pers.joy.entity.Course;
-import pers.joy.entity.SelectCourse;
+import pers.joy.entity.Grade;
+import pers.joy.entity.User;
 
 import java.util.List;
 
-public interface StudentService extends UserService{
+public interface StudentService{
+
+    User signIn(User user);
 
     List<Course> searchByCode(String courseCode);
     /**
@@ -35,7 +38,7 @@ public interface StudentService extends UserService{
      * @param sNo student number
      * @return list of completed courses
      */
-    List<SelectCourse> getCompletedCourses(String sNo);
+    List<Grade> getCompletedCourses(String sNo);
 
-    float getGPA(List<SelectCourse> selectCourseList);
+    float getGPA(List<Grade> gradeList);
 }

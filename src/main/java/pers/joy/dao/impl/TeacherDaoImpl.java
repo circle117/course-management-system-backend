@@ -1,13 +1,24 @@
 package pers.joy.dao.impl;
 
-import pers.joy.dao.TeacherDao;
 import pers.joy.entity.User;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class TeacherDaoImpl extends BaseDao implements TeacherDao {
+public class TeacherDaoImpl extends UserDao implements pers.joy.dao.TeacherDao {
+
+    private final String tableName = "teacher";
+
+    @Override
+    public User queryTeacherByUsernameAndPassword(String username, String password) {
+        return queryUserByUsernameAndPassword(tableName, username, password);
+    }
+
+    @Override
+    public User queryTeacherByTNo(String tNo) {
+        return queryUserByNo(tableName, tNo);
+    }
 
     @Override
     public String queryTNoByTNameAndCCode(String TName, String CCode) {
@@ -23,40 +34,17 @@ public class TeacherDaoImpl extends BaseDao implements TeacherDao {
     }
 
     @Override
-    public int insertTeacher(Map<String, String> teacher) {
-        String sql = "insert into teacher(%s) values(%s)";
-        List<String> items = new ArrayList<>();
-        List<String> values = new ArrayList<>();
-        for (Map.Entry<String, String> entry: teacher.entrySet()) {
-            if (entry.getValue()==null) {
-                continue;
-            }
-            items.add(entry.getKey());
-            values.add("\""+entry.getValue()+"\"");
-        }
-        return update(String.format(sql,
-                String.join(", ", items),
-                String.join(", ", values)));
+    public int insertTeacher(User teacher) {
+        return insertUser(tableName, teacher);
     }
 
     @Override
     public int deleteTeacher(String tNo) {
-        String sql = "delete from teacher where no = ?";
-        return update(sql, tNo);
+        return deleteUser(tableName, tNo);
     }
 
     @Override
-    public int updateTeacher(String tNo, Map<String, String> editTeacher) {
-        String sql = "update teacher set %s where no = ?";
-        List<String> values = new ArrayList<>();
-        for(Map.Entry<String, String> entry: editTeacher.entrySet()) {
-            if (entry.getKey().equals("age")) {
-                values.add("age="+entry.getValue());
-            } else {
-                values.add(entry.getKey()+ "=\"" + entry.getValue()+"\"");
-            }
-        }
-        sql = String.format(sql, String.join(", ", values));
-        return update(sql, tNo);
+    public int updateTeacher(User teacher) {
+        return updateUser(tableName, teacher);
     }
 }

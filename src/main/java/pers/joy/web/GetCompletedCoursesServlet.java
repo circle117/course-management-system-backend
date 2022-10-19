@@ -1,7 +1,7 @@
 package pers.joy.web;
 
 import com.google.gson.Gson;
-import pers.joy.entity.SelectCourse;
+import pers.joy.entity.Grade;
 import pers.joy.service.StudentService;
 import pers.joy.service.impl.StudentServiceImpl;
 
@@ -20,9 +20,9 @@ public class GetCompletedCoursesServlet extends HttpServlet {
         String sNo = request.getParameter("sNo");
 
         Map<String, String> map = new HashMap<>();
-        List<SelectCourse> selectCourseList = studentService.getCompletedCourses(sNo);
-        map.put("completedCourses", gson.toJson(selectCourseList));
-        float gpa = studentService.getGPA(selectCourseList);
+        List<Grade> gradeList = studentService.getCompletedCourses(sNo);
+        map.put("completedCourses", gson.toJson(gradeList));
+        float gpa = studentService.getGPA(gradeList);
         map.put("GPA", String.valueOf(Math.round(gpa*100)/100.0));
 
         response.setHeader("Access-Control-Allow-Origin", "http://localhost:8080");

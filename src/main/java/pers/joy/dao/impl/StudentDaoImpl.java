@@ -1,13 +1,20 @@
 package pers.joy.dao.impl;
 
-import pers.joy.dao.StudentDao;
 import pers.joy.entity.User;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class StudentDaoImpl extends UserDaoImpl implements StudentDao {
+public class StudentDaoImpl extends UserDao implements pers.joy.dao.StudentDao {
+
+    private final String tableName = "student";
+
+    @Override
+    public User queryUserByUsernameAndPassword(String username, String password) {
+        return queryUserByUsernameAndPassword(tableName, username, password);
+    }
+
     @Override
     public List<User> queryAllStudent() {
         String sql = "select * from student";

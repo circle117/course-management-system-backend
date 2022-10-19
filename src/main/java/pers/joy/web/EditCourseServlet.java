@@ -7,6 +7,7 @@ import pers.joy.service.impl.AdministratorServiceImpl;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
+import javax.swing.plaf.IconUIResource;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,12 +18,10 @@ public class EditCourseServlet extends HttpServlet {
     private final Gson gson = new Gson();
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String cCode = request.getParameter("cCode");
-        Map<String, String> editCourse = new HashMap<>();
-        editCourse = gson.fromJson(request.getParameter("editCourse"), editCourse.getClass());
+        Course course = gson.fromJson(request.getParameter("editCourse"), Course.class);
 
         Map<String, String> map = new HashMap<>();
-        int res = administratorService.editCourse(cCode, editCourse);
+        int res = administratorService.editCourse(course);
         if (res>=0) {
             map.put("Status", "success");
         } else {

@@ -1,6 +1,7 @@
 package pers.joy.web;
 
 import com.google.gson.Gson;
+import pers.joy.entity.User;
 import pers.joy.service.AdministratorService;
 import pers.joy.service.impl.AdministratorServiceImpl;
 
@@ -16,8 +17,7 @@ public class CreateTeacherServlet extends HttpServlet {
     private final Gson gson = new Gson();
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Map<String, String> teacher = new HashMap<>();
-        teacher = gson.fromJson(request.getParameter("newTeacher"), teacher.getClass());
+        User teacher = gson.fromJson(request.getParameter("newTeacher"), User.class);
 
         Map<String, String> map = new HashMap<>();
         int res = administratorService.createTeacher(teacher);

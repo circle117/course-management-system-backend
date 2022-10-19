@@ -1,7 +1,7 @@
 package pers.joy.dao.impl;
 
 import pers.joy.dao.GradeDao;
-import pers.joy.entity.SelectCourse;
+import pers.joy.entity.Grade;
 import pers.joy.entity.User;
 
 import java.util.ArrayList;
@@ -9,40 +9,40 @@ import java.util.List;
 
 public class GradeDaoImpl extends BaseDao implements GradeDao {
     @Override
-    public List<String> insertSelectCourse(List<SelectCourse> selectCourseList) {
+    public List<String> insertSelectCourse(List<Grade> gradeList) {
         String sql = "insert into grade(sNo, cCode, tNo) values(?, ?, ?)";
         List<String> failedSelectCourseList = new ArrayList<>();
-        for (SelectCourse selectCourse:selectCourseList) {
-            int res = update(sql, selectCourse.getSNo(), selectCourse.getCCode(), selectCourse.getTNo());
+        for (Grade grade : gradeList) {
+            int res = update(sql, grade.getSNo(), grade.getCCode(), grade.getTNo());
             if (res<0) {
-                failedSelectCourseList.add(selectCourse.getCCode());
+                failedSelectCourseList.add(grade.getCCode());
             }
         }
         return failedSelectCourseList;
     }
 
     @Override
-    public void deleteCourse(List<SelectCourse> selectCourseList) {
+    public void deleteCourse(List<Grade> gradeList) {
         String sql = "delete from grade where sNo = ? and cCode = ? and tNo = ?";
-        for (SelectCourse selectCourse: selectCourseList) {
-            update(sql, selectCourse.getSNo(), selectCourse.getCCode(), selectCourse.getTNo());
+        for (Grade grade : gradeList) {
+            update(sql, grade.getSNo(), grade.getCCode(), grade.getTNo());
         }
     }
 
     @Override
-    public List<SelectCourse> queryForCompletedCourses(String sNo) {
+    public List<Grade> queryForCompletedCourses(String sNo) {
         String sql = "select distinct `sNo`, grade.`cCode`, `grade`, `point`, course.`cName`, `credit` " +
                 "from grade left join course on grade.cCode=course.cCode " +
                 "where sNo = ? and grade is not null";
-        return queryForList(SelectCourse.class, sql, sNo);
+        return queryForList(Grade.class, sql, sNo);
     }
 
     @Override
-    public List<SelectCourse> queryForCompletedCourseStudent(String cName) {
+    public List<Grade> queryForCompletedCourseStudent(String cName) {
         String sql = "select distinct `sNo`, `grade`, `point` " +
                 "from grade inner join course on grade.cCode=course.cCode " +
                 "where cName = ? and grade is not null";
-        return queryForList(SelectCourse.class, sql, cName);
+        return queryForList(Grade.class, sql, cName);
     }
 
     @Override
@@ -61,11 +61,11 @@ public class GradeDaoImpl extends BaseDao implements GradeDao {
     }
 
     @Override
-    public List<SelectCourse> queryForCompletedCourseStudentForTeacher(String cName, String tNo) {
+    public List<Grade> queryForCompletedCourseStudentForTeacher(String cName, String tNo) {
         String sql = "select distinct `sNo`, `grade`, `point` " +
                 "from grade inner join course on grade.cCode=course.cCode " +
                 "where cName = ? and grade is not null and course.tNo = ?";
-        return queryForList(SelectCourse.class, sql, cName, tNo);
+        return queryForList(Grade.class, sql, cName, tNo);
     }
 
     @Override

@@ -1,15 +1,12 @@
 package pers.joy.service.impl;
 
-import pers.joy.dao.CourseDao;
-import pers.joy.dao.GradeDao;
-import pers.joy.dao.StudentDao;
-import pers.joy.dao.TeacherDao;
-import pers.joy.dao.impl.CourseDaoImpl;
-import pers.joy.dao.impl.GradeDaoImpl;
+import pers.joy.dao.*;
+import pers.joy.dao.impl.*;
+import pers.joy.dao.impl.AdministratorDao;
 import pers.joy.dao.impl.StudentDaoImpl;
 import pers.joy.dao.impl.TeacherDaoImpl;
 import pers.joy.entity.Course;
-import pers.joy.entity.SelectCourse;
+import pers.joy.entity.Grade;
 import pers.joy.entity.User;
 import pers.joy.service.AdministratorService;
 
@@ -17,12 +14,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class AdministratorServiceImpl extends UserServiceImpl implements AdministratorService {
+public class AdministratorServiceImpl implements AdministratorService {
 
-    private final TeacherDao teacherDao = new TeacherDaoImpl();
+    private final pers.joy.dao.TeacherDao teacherDao = new TeacherDaoImpl();
     private final CourseDao courseDao = new CourseDaoImpl();
-    private final StudentDao studentDao = new StudentDaoImpl();
+    private final pers.joy.dao.StudentDao studentDao = new StudentDaoImpl();
     private final GradeDao gradeDao = new GradeDaoImpl();
+    private final pers.joy.dao.AdministratorDao administratorDao = new AdministratorDao();
+
+    @Override
+    public User signIn(User user) {
+        return administratorDao.queryUserByUsernameAndPassword(user.getUsername(), user.getPassword());
+    }
 
     @Override
     public List<User> getTeacherList() {
@@ -40,9 +43,8 @@ public class AdministratorServiceImpl extends UserServiceImpl implements Adminis
     }
 
     @Override
-    public int createCourse(Map<String, String> course) {
-        boolean ifExist = courseDao.existCourseCode(course.get("cCode")).size()>0;
-        if (ifExist) {
+    public int createCourse(Course course) {
+        if (courseDao.existCourseCode(course.getCCode()).size()>0) {
             return -1;
         }
         return courseDao.insertCourse(course);
@@ -50,16 +52,12 @@ public class AdministratorServiceImpl extends UserServiceImpl implements Adminis
 
     @Override
     public int deleteCourse(Course course) {
-        return courseDao.deleteCourse(course);
+        return courseDao.deleteCourseByCCode(course);
     }
 
     @Override
-    public int editCourse(String cCode, Map<String, String> editCourse) {
-        if (editCourse.size()==0) {
-            return -1;
-        } else {
-            return courseDao.updateCourse(cCode, editCourse);
-        }
+    public int editCourse(Course course) {
+       return courseDao.updateCourse(course);
     }
 
     @Override
@@ -77,8 +75,15 @@ public class AdministratorServiceImpl extends UserServiceImpl implements Adminis
             }
         }
         // add new items for other tNo
-        Course courseInfo = courseDao.queryCourseInfo(courseCode);
-        failTeacherNo.addAll(courseDao.insertTNo(courseInfo, teacherList));
+        Course course = courseDao.queryCourseInfoByCCode(courseCode);
+        for (String teacher: teacherList) {
+            if (courseDao.queryCourseByCCodeAndTNo(courseCode, teacher)==null) {
+                course.setTNo(teacher);
+                courseDao.insertCourse(course);
+            } else {
+                failTeacherNo.add(teacher);
+            }
+        }
         return failTeacherNo;
     }
 
@@ -102,7 +107,10 @@ public class AdministratorServiceImpl extends UserServiceImpl implements Adminis
     }
 
     @Override
-    public int createTeacher(Map<String, String> teacher) {
+    public int createTeacher(User teacher) {
+        if (teacherDao.queryTeacherByTNo(teacher.getNo())!=null) {
+            return -1;
+        }
         return teacherDao.insertTeacher(teacher);
     }
 
@@ -112,12 +120,8 @@ public class AdministratorServiceImpl extends UserServiceImpl implements Adminis
     }
 
     @Override
-    public int editTeacher(String tNo, Map<String, String> editTeacher) {
-        if (editTeacher.size()==0) {
-            return -1;
-        } else {
-            return teacherDao.updateTeacher(tNo, editTeacher);
-        }
+    public int editTeacher(User teacher) {
+        return teacherDao.updateTeacher(teacher);
     }
 
     @Override
@@ -126,7 +130,7 @@ public class AdministratorServiceImpl extends UserServiceImpl implements Adminis
     }
 
     @Override
-    public List<SelectCourse> getCompletedCourseStudent(String cName) {
+    public List<Grade> getCompletedCourseStudent(String cName) {
         return gradeDao.queryForCompletedCourseStudent(cName);
     }
 

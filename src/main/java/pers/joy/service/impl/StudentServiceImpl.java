@@ -4,18 +4,25 @@ import pers.joy.dao.CourseDao;
 import pers.joy.dao.GradeDao;
 import pers.joy.dao.impl.CourseDaoImpl;
 import pers.joy.dao.impl.GradeDaoImpl;
+import pers.joy.dao.impl.StudentDaoImpl;
 import pers.joy.entity.Course;
-import pers.joy.entity.SelectCourse;
+import pers.joy.entity.Grade;
 import pers.joy.entity.User;
 import pers.joy.service.StudentService;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class StudentServiceImpl extends UserServiceImpl implements StudentService {
+public class StudentServiceImpl implements StudentService {
 
     private final CourseDao courseDao = new CourseDaoImpl();
     private final GradeDao gradeDao = new GradeDaoImpl();
+    private final pers.joy.dao.StudentDao studentDao = new StudentDaoImpl();
+
+    @Override
+    public User signIn(User user) {
+        return studentDao.queryUserByUsernameAndPassword(user.getUsername(), user.getPassword());
+    }
 
     @Override
     public List<Course> searchByCode(String courseCode) {
@@ -24,37 +31,37 @@ public class StudentServiceImpl extends UserServiceImpl implements StudentServic
 
     @Override
     public List<Course> getSelectedCourses(String sNo) {
-        return courseDao.querySelectedCourses(sNo);
+        return courseDao.querySelectedCoursesBySNo(sNo);
     }
 
     @Override
     public List<String> selectCourse(String sNo, List<Course> courseList) {
-        List<SelectCourse> selectCourseList = new ArrayList<>();
+        List<Grade> gradeList = new ArrayList<>();
         for (Course c:courseList) {
-            selectCourseList.add(new SelectCourse(sNo, c.getCCode(), c.getTNo()));
+            gradeList.add(new Grade(sNo, c.getCCode(), c.getTNo()));
         }
-        return gradeDao.insertSelectCourse(selectCourseList);
+        return gradeDao.insertSelectCourse(gradeList);
     }
 
     @Override
     public void dropCourse(String sNo, List<Course> courseList) {
-        List<SelectCourse> selectCourseList = new ArrayList<>();
+        List<Grade> gradeList = new ArrayList<>();
         for (Course c:courseList) {
-            selectCourseList.add(new SelectCourse(sNo, c.getCCode(), c.getTNo()));
+            gradeList.add(new Grade(sNo, c.getCCode(), c.getTNo()));
         }
-        gradeDao.deleteCourse(selectCourseList);
+        gradeDao.deleteCourse(gradeList);
     }
 
     @Override
-    public List<SelectCourse> getCompletedCourses(String sNo) {
+    public List<Grade> getCompletedCourses(String sNo) {
         return gradeDao.queryForCompletedCourses(sNo);
     }
 
     @Override
-    public float getGPA(List<SelectCourse> selectCourseList) {
+    public float getGPA(List<Grade> gradeList) {
         int gradeSum = 0;
         int creditSum = 0;
-        for(SelectCourse c: selectCourseList) {
+        for(Grade c: gradeList) {
             gradeSum += c.getGrade()*c.getCredit();
             creditSum += c.getCredit();
         }

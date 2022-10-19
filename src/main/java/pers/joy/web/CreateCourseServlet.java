@@ -18,17 +18,16 @@ public class CreateCourseServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Map<String, String> course = new HashMap<>();
-        course = gson.fromJson(request.getParameter("newCourse"), course.getClass());
+        Course course = gson.fromJson(request.getParameter("newCourse"), Course.class);
 
         Map<String, String> map = new HashMap<>();
         int res = administratorService.createCourse(course);
         if (res>0) {
             map.put("Status", "success");
-            map.put("cCode", course.get("cCode"));
+            map.put("cCode", course.getCCode());
         } else {
             map.put("Status", "fail");
-            map.put("cCode", course.get("cCode"));
+            map.put("cCode", course.getCCode());
         }
 
         response.setHeader("Access-Control-Allow-Origin", "http://localhost:8080");
