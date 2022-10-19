@@ -1,6 +1,6 @@
 package pers.joy.entity;
 
-public class SelectCourse {
+public class Grade {
 
     private String sNo;
     private String cCode;
@@ -58,7 +58,7 @@ public class SelectCourse {
         this.credit = credit;
     }
 
-    public SelectCourse(String sNo, String cCode, float grade, float point, String cName, int credit) {
+    public Grade(String sNo, String cCode, float grade, float point, String cName, int credit) {
         this.sNo = sNo;
         this.cCode = cCode;
         this.grade = grade;
@@ -67,13 +67,13 @@ public class SelectCourse {
         this.credit = credit;
     }
 
-    public SelectCourse(String sNo, String cCode, String tNo) {
+    public Grade(String sNo, String cCode, String tNo) {
         this.sNo = sNo;
         this.cCode = cCode;
         this.tNo = tNo;
     }
 
-    public SelectCourse() {
+    public Grade() {
     }
 
     @Override
