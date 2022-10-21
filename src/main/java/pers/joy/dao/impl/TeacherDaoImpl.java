@@ -29,8 +29,7 @@ public class TeacherDaoImpl extends UserDao implements pers.joy.dao.TeacherDao {
 
     @Override
     public List<User> queryAllTeacher() {
-        String sql = "select * from teacher";
-        return queryForList(User.class, sql);
+        return queryAllUser(tableName);
     }
 
     @Override

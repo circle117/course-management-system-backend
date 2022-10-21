@@ -19,12 +19,11 @@ public interface StudentService{
     List<Course> getSelectedCourses(String sNo);
 
     /**
-     * select courses
-     * @param sNo student number
-     * @param courseList courses wanted to select
-     * @return failed selected courses
+     * select course
+     * @param gradeList List of Grade object
+     * @return List of failed selected course
      */
-    List<String> selectCourse(String sNo, List<Course> courseList);
+    List<String> selectCourse(List<Grade> gradeList);
 
     /**
      * drop courses

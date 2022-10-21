@@ -2,6 +2,8 @@ package pers.joy.dao.impl;
 
 import pers.joy.entity.User;
 
+import java.util.List;
+
 public abstract class UserDao extends BaseDao{
 
     protected User queryUserByUsernameAndPassword(String tableName, String username, String password) {
@@ -12,6 +14,11 @@ public abstract class UserDao extends BaseDao{
     protected User queryUserByNo(String tableName, String no) {
         String sql = String.format("select * from %s where no = ?", tableName);
         return queryForOne(User.class, sql, no);
+    }
+
+    protected List<User> queryAllUser(String tableName) {
+        String sql = String.format("select * from %s", tableName);
+        return queryForList(User.class, sql);
     }
 
     protected int insertUser(String tableName, User user) {

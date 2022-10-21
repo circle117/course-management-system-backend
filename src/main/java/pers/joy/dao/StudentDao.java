@@ -7,14 +7,46 @@ import java.util.Map;
 
 public interface StudentDao{
 
-    User queryUserByUsernameAndPassword(String username, String password);
+    /**
+     * query Student by username and password
+     * @param username username
+     * @param password password
+     * @return user or null
+     */
+    User queryStudentByUsernameAndPassword(String username, String password);
 
+    /**
+     * query all students
+     * @return list of students
+     */
     List<User> queryAllStudent();
 
-    int insertStudent(Map<String, String> user);
+    /**
+     * query student by student no
+     * @param sNo student no
+     * @return User class
+     */
+    User queryStudentBySNo(String sNo);
 
-    int editStudent(String sNo, Map<String, String> updateStudent);
+    /**
+     * create new student
+     * @param student User object
+     * @return 1 or -1
+     */
+    int insertStudent(User student);
 
+    /**
+     * update student info
+     * @param student User object
+     * @return 1 or -1
+     */
+    int updateStudent(User student);
+
+    /**
+     * delete student
+     * @param sNo student number
+     * @return 1 or -1
+     */
     int deleteStudent(String sNo);
 
 }

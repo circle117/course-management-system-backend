@@ -21,7 +21,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public User signIn(User user) {
-        return studentDao.queryUserByUsernameAndPassword(user.getUsername(), user.getPassword());
+        return studentDao.queryStudentByUsernameAndPassword(user.getUsername(), user.getPassword());
     }
 
     @Override
@@ -35,12 +35,14 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public List<String> selectCourse(String sNo, List<Course> courseList) {
-        List<Grade> gradeList = new ArrayList<>();
-        for (Course c:courseList) {
-            gradeList.add(new Grade(sNo, c.getCCode(), c.getTNo()));
+    public List<String> selectCourse(List<Grade> gradeList) {
+        List<String> failSelectedCourse = new ArrayList<>();
+        for (Grade grade:gradeList) {
+            if (gradeDao.insertGrade(grade)<0) {
+                failSelectedCourse.add(grade.getCCode());
+            }
         }
-        return gradeDao.insertSelectCourse(gradeList);
+        return failSelectedCourse;
     }
 
     @Override

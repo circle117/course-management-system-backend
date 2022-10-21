@@ -23,13 +23,13 @@ public interface AdministratorService{
 
     int editCourse(Course course);
 
-    List<String> addTeacher(String courseCode, List<String> teacherList);
+    int createStudent(User student);
 
-    int createStudent(Map<String, String> student);
-
-    int editStudent(String sNo, Map<String, String> updateStudent);
+    int editStudent(User student);
 
     int deleteStudent(String sNo);
+
+    List<String> addTeacher(String courseCode, List<String> teacherList);
 
     int createTeacher(User teacher);
 

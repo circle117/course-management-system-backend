@@ -88,17 +88,16 @@ public class AdministratorServiceImpl implements AdministratorService {
     }
 
     @Override
-    public int createStudent(Map<String, String> student) {
+    public int createStudent(User student) {
+        if (studentDao.queryStudentBySNo(student.getNo())!=null) {
+            return -1;
+        }
         return studentDao.insertStudent(student);
     }
 
     @Override
-    public int editStudent(String sNo, Map<String, String> updateStudent) {
-        if (updateStudent.size()==0) {
-            return -1;
-        } else {
-            return studentDao.editStudent(sNo, updateStudent);
-        }
+    public int editStudent(User student) {
+        return studentDao.updateStudent(student);
     }
 
     @Override
