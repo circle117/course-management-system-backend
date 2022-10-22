@@ -27,10 +27,9 @@ public interface StudentService{
 
     /**
      * drop courses
-     * @param sNo student number
-     * @param courseList list of couses wanted to drop
+     * @param gradeList list of couses wanted to drop
      */
-    void dropCourse(String sNo, List<Course> courseList);
+    void dropCourse(List<Grade> gradeList);
 
     /**
      * get completed courses

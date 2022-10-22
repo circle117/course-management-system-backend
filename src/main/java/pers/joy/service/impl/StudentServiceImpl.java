@@ -46,17 +46,15 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public void dropCourse(String sNo, List<Course> courseList) {
-        List<Grade> gradeList = new ArrayList<>();
-        for (Course c:courseList) {
-            gradeList.add(new Grade(sNo, c.getCCode(), c.getTNo()));
+    public void dropCourse(List<Grade> gradeList) {
+        for (Grade grade:gradeList) {
+            gradeDao.deleteGrade(grade);
         }
-        gradeDao.deleteCourse(gradeList);
     }
 
     @Override
     public List<Grade> getCompletedCourses(String sNo) {
-        return gradeDao.queryForCompletedCourses(sNo);
+        return gradeDao.queryCompletedCoursesBySNo(sNo);
     }
 
     @Override

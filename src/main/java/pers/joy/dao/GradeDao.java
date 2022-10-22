@@ -6,33 +6,64 @@ import pers.joy.entity.User;
 import java.util.List;
 
 public interface GradeDao {
+
     /**
-     * insert courses in grade table
-     * @param gradeList include sNo, cCode, tNo
-     * @return failed inserted courses
+     * insert grade
+     * @param grade Grade object
+     * @return 1 or -1
      */
-    List<String> insertSelectCourse(List<Grade> gradeList);
+    int insertGrade(Grade grade);
 
     /**
      * delete courses in grade table
-     * @param gradeList include sNo, cCode, tNo
+     * @param grade list of Grade object including sNo, cCode, tNo
      */
-    void deleteCourse(List<Grade> gradeList);
+    void deleteGrade(Grade grade);
 
     /**
      * query for completed courses (have grade)
      * @param sNo student number
      * @return list of courses with grade and point
      */
-    List<Grade> queryForCompletedCourses(String sNo);
+    List<Grade> queryCompletedCoursesBySNo(String sNo);
 
-    List<Grade> queryForCompletedCourseStudent(String cName);
+    /**
+     * query student who completed certain course
+     * @param cName course name
+     * @return list of Grade object
+     */
+    List<Grade> queryCompletedCourseStudentByCName(String cName);
 
-    List<User> queryForSelectedCourseStudent(String cName);
+    /**
+     * query students who are currently taking the certain course
+     * @param cName course name
+     * @return list of User object
+     */
+    List<User> querySelectedCourseStudentByCName(String cName);
 
+    /**
+     * input grade and point
+     * @param sNo student No
+     * @param cCode course code
+     * @param grade grade [0, 100]
+     * @param point point [0, 4.0]
+     * @return 1 or -1
+     */
     int updateGrade(String sNo, String cCode, String grade, String point);
 
-    List<Grade> queryForCompletedCourseStudentForTeacher(String cName, String tNo);
+    /**
+     * query students who completed the course for teacher
+     * @param cName course name
+     * @param tNo teacher No
+     * @return list of Grade object
+     */
+    List<Grade> queryCompletedCourseStudentByCNameAndTeacher(String cName, String tNo);
 
-    List<User> queryForSelectedCourseStudentForTeacher(String cName, String tNo);
+    /**
+     * query students who are currently taking the course
+     * @param cName course name
+     * @param tNo teacher No
+     * @return list of Grade object
+     */
+    List<User> querySelectedCourseStudentByCNameAndTeacher(String cName, String tNo);
 }
