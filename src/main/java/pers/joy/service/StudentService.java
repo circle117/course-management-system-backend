@@ -1,7 +1,5 @@
 package pers.joy.service;
 
-import pers.joy.entity.Course;
-import pers.joy.entity.Grade;
 import pers.joy.entity.User;
 
 import java.util.List;
@@ -10,33 +8,11 @@ public interface StudentService{
 
     User signIn(User user);
 
-    List<Course> searchByCode(String courseCode);
-    /**
-     * get selected courses
-     * @param sNo student number
-     * @return list of selected courses
-     */
-    List<Course> getSelectedCourses(String sNo);
+    List<User> getStudentList();
 
-    /**
-     * select course
-     * @param gradeList List of Grade object
-     * @return List of failed selected course
-     */
-    List<String> selectCourse(List<Grade> gradeList);
+    int createStudent(User student);
 
-    /**
-     * drop courses
-     * @param gradeList list of couses wanted to drop
-     */
-    void dropCourse(List<Grade> gradeList);
+    int editStudent(User student);
 
-    /**
-     * get completed courses
-     * @param sNo student number
-     * @return list of completed courses
-     */
-    List<Grade> getCompletedCourses(String sNo);
-
-    float getGPA(List<Grade> gradeList);
+    int deleteStudent(String sNo);
 }

@@ -1,6 +1,5 @@
 package pers.joy.service;
 
-import pers.joy.entity.Grade;
 import pers.joy.entity.User;
 
 import java.util.List;
@@ -8,9 +7,11 @@ import java.util.List;
 public interface TeacherService{
     User signIn(User user);
 
-    List<Object> getCourseNameListForTeacher(String tNo);
+    List<User> getTeacherList();
 
-    List<Grade> getCompletedCourseStudentForTeacher(String cName, String tNo);
+    int createTeacher(User teacher);
 
-    List<User> getSelectedCourseStudentForTeacher(String cName, String tNo);
+    int deleteTeacher(String tNo);
+
+    int editTeacher(User teacher);
 }
