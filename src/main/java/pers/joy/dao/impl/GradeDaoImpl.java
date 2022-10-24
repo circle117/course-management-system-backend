@@ -72,4 +72,10 @@ public class GradeDaoImpl extends BaseDao implements GradeDao {
         String sql = "select * from grade where tNo = ?";
         return queryForList(Grade.class, sql, tNo);
     }
+
+    @Override
+    public String queryGradeSumBySNo(String sNo) {
+        String sql = "select count(*) from grade where sNo = ? and grade is null";
+        return String.valueOf(queryForSingleValue(sql, sNo));
+    }
 }

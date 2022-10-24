@@ -11,14 +11,23 @@ public interface CourseService {
      * @param courseCode course code
      * @return list of courses beginning with courseCode
      */
-    List<Course> searchByCode(String courseCode);
+    List<Course> searchByCode(String courseCode, int pageNum, int pageSize);
+
+    /**
+     * get course sum
+     * @param courseCode course code
+     * @return a String
+     */
+    String getCourseSum(String courseCode);
 
     /**
      * get selected courses information
      * @param sNo student number
+     * @param pageNum page number
+     * @param pageSize page size
      * @return list of selected courses
      */
-    List<Course> getSelectedCoursesInfo(String sNo);
+    List<Course> getSelectedCoursesInfo(String sNo, int pageNum, int pageSize);
 
     /**
      * get course name list by teacher No

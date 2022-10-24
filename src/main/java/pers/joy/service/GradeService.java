@@ -65,4 +65,11 @@ public interface GradeService {
      * @return list of User objects
      */
     List<User> getSelectedCourseStudent(String cName);
+
+    /**
+     * get number of courses a student is taking
+     * @param sNo student number
+     * @return the number
+     */
+    String getSelectedCourseSum(String sNo);
 }

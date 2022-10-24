@@ -73,4 +73,11 @@ public interface GradeDao {
      * @return list of Grade object
      */
     List<Grade> queryGradeByTNo(String tNo);
+
+    /**
+     * query number of courses a student is taking
+     * @param sNo student No
+     * @return int
+     */
+    String queryGradeSumBySNo(String sNo);
 }

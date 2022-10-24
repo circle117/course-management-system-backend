@@ -11,21 +11,28 @@ import java.util.Map;
 public class CourseDaoImpl extends BaseDao implements CourseDao {
 
     @Override
-    public List<Course> queryCourseByCourseCode(String courseCode) {
+    public List<Course> queryCourseByCourseCode(String courseCode, int begin, int pageSize) {
         String sql = "select `cCode`, `cName`, `credit`, `cDept`, `name` as `tName`, course.`tNo`" +
                 "from course inner join teacher on course.tNo = teacher.no where cCode like ? " +
-                "order by cCode";
-        courseCode = courseCode+'%';
-        return queryForList(Course.class, sql, courseCode);
+                "order by cCode limit ?, ?";
+        courseCode = "%"+courseCode+"%";
+        return queryForList(Course.class, sql, courseCode, begin, pageSize);
     }
 
     @Override
-    public List<Course> querySelectedCoursesBySNo(String sNo) {
+    public String queryCourseSum(String courseCode) {
+        String sql = "select count(*) from course where cCode like ?";
+        courseCode = "%"+courseCode+"%";
+        return String.valueOf(queryForSingleValue(sql, courseCode));
+    }
+
+    @Override
+    public List<Course> querySelectedCoursesBySNo(String sNo, int begin, int pageSize) {
         String sql = "select course.`cCode`, `cName`, `credit`, `cDept`, `name` as `tName`, course.`tNo`" +
                 "from grade inner join course on grade.cCode=course.cCode and grade.tNo=course.tNo " +
                 "inner join teacher on course.tNo=teacher.no " +
-                "where sNo = ? and grade is null order by course.cCode";
-        return queryForList(Course.class, sql, sNo);
+                "where sNo = ? and grade is null order by course.cCode limit ?, ?";
+        return queryForList(Course.class, sql, sNo, begin, pageSize);
     }
 
     @Override

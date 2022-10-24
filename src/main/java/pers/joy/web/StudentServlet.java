@@ -46,7 +46,6 @@ public class StudentServlet extends BaseServlet{
             map.put("status", "success");
             map.put("no", user.getNo());
             map.put("name", user.getName());
-            map.put("selectedCourses", gson.toJson(courseService.getSelectedCoursesInfo(user.getNo())));
         }
     }
 
@@ -55,8 +54,11 @@ public class StudentServlet extends BaseServlet{
      */
     protected void searchCourse(HttpServletRequest request, Map<String, String> map) {
         String cCode = request.getParameter("courseCode");
-        List<Course> courses = courseService.searchByCode(cCode);
+        int pageNum = Integer.parseInt(request.getParameter("pageNum"));
+        int pageSize = Integer.parseInt(request.getParameter("pageSize"));
+        List<Course> courses = courseService.searchByCode(cCode, pageNum, pageSize);
         map.put("dataCourse", gson.toJson(courses));
+        map.put("pageCount", courseService.getCourseSum(cCode));
     }
 
     /**
@@ -104,7 +106,10 @@ public class StudentServlet extends BaseServlet{
      */
     protected void selectedCourse(HttpServletRequest request, Map<String, String> map) {
         String sNo = request.getParameter("sNo");
-        map.put("selectedCourses", gson.toJson(courseService.getSelectedCoursesInfo(sNo)));
+        int pageNum = Integer.parseInt(request.getParameter("pageNum"));
+        int pageSize = Integer.parseInt(request.getParameter("pageSize"));
+        map.put("selectedCourses", gson.toJson(courseService.getSelectedCoursesInfo(sNo, pageNum, pageSize)));
+        map.put("pageCount", gradeService.getSelectedCourseSum(sNo));
     }
 
     /**

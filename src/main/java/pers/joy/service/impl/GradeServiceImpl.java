@@ -66,6 +66,11 @@ public class GradeServiceImpl implements GradeService {
         return gradeDao.querySelectedCourseStudentByCName(cName);
     }
 
+    @Override
+    public String getSelectedCourseSum(String sNo) {
+        return gradeDao.queryGradeSumBySNo(sNo);
+    }
+
     private float getPoint(int grade) {
         if (grade >= 90) {
             return 4.0f;

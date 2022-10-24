@@ -8,16 +8,25 @@ public interface CourseDao {
     /**
      * query course by cCode
      * @param courseCode cCode
+     * @param begin page number
+     * @param pageSize page size
      * @return list of the course with different teacher
      */
-    List<Course> queryCourseByCourseCode(String courseCode);
+    List<Course> queryCourseByCourseCode(String courseCode, int begin, int pageSize);
+
+    /**
+     * get sum of courses
+     * @param courseCode course code
+     * @return a String object
+     */
+    String queryCourseSum(String courseCode);
 
     /**
      * query selected courses for one student
      * @param sNo student number( no in table student)
      * @return list of courses
      */
-    List<Course> querySelectedCoursesBySNo(String sNo);
+    List<Course> querySelectedCoursesBySNo(String sNo, int begin, int pageSize);
 
     /**
      * query all exist courses

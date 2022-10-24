@@ -12,13 +12,20 @@ public class CourseServiceImpl implements CourseService {
     private final CourseDao courseDao = new CourseDaoImpl();
 
     @Override
-    public List<Course> searchByCode(String courseCode) {
-        return courseDao.queryCourseByCourseCode(courseCode);
+    public List<Course> searchByCode(String courseCode, int pageNum, int pageSize) {
+        int begin = (pageNum-1)*pageSize;
+        return courseDao.queryCourseByCourseCode(courseCode, begin, pageSize);
     }
 
     @Override
-    public List<Course> getSelectedCoursesInfo(String sNo) {
-        return courseDao.querySelectedCoursesBySNo(sNo);
+    public String getCourseSum(String courseCode) {
+        return courseDao.queryCourseSum(courseCode);
+    }
+
+    @Override
+    public List<Course> getSelectedCoursesInfo(String sNo, int pageNum, int pageSize) {
+        int begin = (pageNum-1)*pageSize;
+        return courseDao.querySelectedCoursesBySNo(sNo, begin, pageSize);
     }
 
     @Override
