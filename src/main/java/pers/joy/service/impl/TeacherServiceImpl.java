@@ -1,5 +1,8 @@
 package pers.joy.service.impl;
 
+import pers.joy.dao.GradeDao;
+import pers.joy.dao.TeacherDao;
+import pers.joy.dao.impl.GradeDaoImpl;
 import pers.joy.dao.impl.TeacherDaoImpl;
 import pers.joy.entity.User;
 import pers.joy.service.TeacherService;
@@ -9,7 +12,8 @@ import java.util.List;
 
 public class TeacherServiceImpl implements TeacherService {
 
-    private final pers.joy.dao.TeacherDao teacherDao = new TeacherDaoImpl();
+    private final TeacherDao teacherDao = new TeacherDaoImpl();
+    private final GradeDao gradeDao = new GradeDaoImpl();
 
     @Override
     public User signIn(User user) {
@@ -31,6 +35,9 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public int deleteTeacher(String tNo) {
+        if (gradeDao.queryGradeByTNo(tNo).size()>0) {
+            return -1;
+        }
         return teacherDao.deleteTeacher(tNo);
     }
 

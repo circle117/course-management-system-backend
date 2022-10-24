@@ -66,4 +66,10 @@ public class GradeDaoImpl extends BaseDao implements GradeDao {
                 "cName = ? and grade.tNo = ?";
         return queryForList(User.class, sql, cName, tNo);
     }
+
+    @Override
+    public List<Grade> queryGradeByTNo(String tNo) {
+        String sql = "select * from grade where tNo = ?";
+        return queryForList(Grade.class, sql, tNo);
+    }
 }

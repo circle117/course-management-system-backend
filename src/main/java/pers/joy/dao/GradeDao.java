@@ -66,4 +66,11 @@ public interface GradeDao {
      * @return list of Grade object
      */
     List<User> querySelectedCourseStudentByCNameAndTeacher(String cName, String tNo);
+
+    /**
+     * query grade by teacher No
+     * @param tNo teacher No
+     * @return list of Grade object
+     */
+    List<Grade> queryGradeByTNo(String tNo);
 }
