@@ -19,7 +19,13 @@ public interface StudentDao{
      * query all students
      * @return list of students
      */
-    List<User> queryAllStudent();
+    List<User> queryAllStudent(int begin, int pageSize);
+
+    /**
+     * get the sum of students
+     * @return a string
+     */
+    String queryStudentSum();
 
     /**
      * query student by student no

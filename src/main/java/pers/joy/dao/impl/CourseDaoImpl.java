@@ -20,7 +20,7 @@ public class CourseDaoImpl extends BaseDao implements CourseDao {
     }
 
     @Override
-    public String queryCourseSum(String courseCode) {
+    public String queryCourseSumByCCode(String courseCode) {
         String sql = "select count(*) from course where cCode like ?";
         courseCode = "%"+courseCode+"%";
         return String.valueOf(queryForSingleValue(sql, courseCode));
@@ -36,9 +36,16 @@ public class CourseDaoImpl extends BaseDao implements CourseDao {
     }
 
     @Override
-    public List<Course> queryAllCourse() {
-        String sql = "select `cCode`, `cName`, `credit`, `cDept`, `tNo` from course order by cCode, tNo";
-        return queryForList(Course.class, sql);
+    public List<Course> queryAllCourse(int begin, int pageSize) {
+        String sql = "select `cCode`, `cName`, `credit`, `cDept`, `tNo` from course order by cCode, tNo " +
+                "limit ?, ?";
+        return queryForList(Course.class, sql, begin, pageSize);
+    }
+
+    @Override
+    public String queryCourseSum() {
+        String sql = "select count(*) from course";
+        return String.valueOf(queryForSingleValue(sql));
     }
 
     @Override

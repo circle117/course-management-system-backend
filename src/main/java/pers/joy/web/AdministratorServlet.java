@@ -75,8 +75,13 @@ public class AdministratorServlet extends BaseServlet {
      * course management
      */
     protected void getCourseList(HttpServletRequest request, Map<String, String> map) {
-        List<Course> courseList = courseService.getCourseList();
+        int pageNum = Integer.parseInt(request.getParameter("pageNum"));
+        int pageSize = Integer.parseInt(request.getParameter("pageSize"));
+        List<Course> courseList = courseService.getCourseList(pageNum, pageSize);
         map.put("dataCourse", gson.toJson(courseList));
+        if (pageNum==1) {
+            map.put("pageCount", courseService.getCourseSum());
+        }
     }
 
     protected void createCourse(HttpServletRequest request, Map<String, String> map) {
@@ -135,8 +140,13 @@ public class AdministratorServlet extends BaseServlet {
      * student management
      */
     protected void getStudentList(HttpServletRequest request, Map<String, String> map) {
-        List<User> userList = studentService.getStudentList();
+        int pageNum = Integer.parseInt(request.getParameter("pageNum"));
+        int pageSize = Integer.parseInt(request.getParameter("pageSize"));
+        List<User> userList = studentService.getStudentList(pageNum, pageSize);
         map.put("dataStudent", gson.toJson(userList));
+        if (pageNum==1) {
+            map.put("pageCount", studentService.getStudentSum());
+        }
     }
 
     protected void createStudent(HttpServletRequest request, Map<String, String> map) {
@@ -177,8 +187,13 @@ public class AdministratorServlet extends BaseServlet {
      * teacher management
      */
     protected void getTeacherList(HttpServletRequest request, Map<String, String> map) {
-        List<User> teacherList = teacherService.getTeacherList();
+        int pageNum = Integer.parseInt(request.getParameter("pageNum"));
+        int pageSize = Integer.parseInt(request.getParameter("pageSize"));
+        List<User> teacherList = teacherService.getTeacherList(pageNum, pageSize);
         map.put("dataTeacher", gson.toJson(teacherList));
+        if (pageNum==1) {
+            map.put("pageCount", teacherService.getTeacherSum());
+        }
     }
 
     protected void createTeacher(HttpServletRequest request, Map<String, String> map) {

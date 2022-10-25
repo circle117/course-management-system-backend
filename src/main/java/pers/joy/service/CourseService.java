@@ -18,7 +18,7 @@ public interface CourseService {
      * @param courseCode course code
      * @return a String
      */
-    String getCourseSum(String courseCode);
+    String getCourseSumByCCode(String courseCode);
 
     /**
      * get selected courses information
@@ -40,7 +40,13 @@ public interface CourseService {
      * get course list
      * @return list of Course objects
      */
-    List<Course> getCourseList();
+    List<Course> getCourseList(int pageNum, int pageSize);
+
+    /**
+     * get the sum of courses
+     * @return a string
+     */
+    String getCourseSum();
 
     /**
      * get all course name list

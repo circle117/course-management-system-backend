@@ -21,8 +21,14 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public List<User> getTeacherList() {
-        return teacherDao.queryAllTeacher();
+    public List<User> getTeacherList(int pageNum, int pageSize) {
+        int begin = (pageNum-1)*pageSize;
+        return teacherDao.queryAllTeacher(begin, pageSize);
+    }
+
+    @Override
+    public String getTeacherSum() {
+        return teacherDao.queryTeacherSum();
     }
 
     @Override

@@ -19,7 +19,7 @@ public interface CourseDao {
      * @param courseCode course code
      * @return a String object
      */
-    String queryCourseSum(String courseCode);
+    String queryCourseSumByCCode(String courseCode);
 
     /**
      * query selected courses for one student
@@ -32,7 +32,13 @@ public interface CourseDao {
      * query all exist courses
      * @return list of all the courses
      */
-    List<Course> queryAllCourse();
+    List<Course> queryAllCourse(int begin, int pageSize);
+
+    /**
+     * query the sum of courses
+     * @return a String
+     */
+    String queryCourseSum();
 
     /**
      * query all the course names

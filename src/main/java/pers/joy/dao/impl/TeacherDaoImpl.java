@@ -28,8 +28,13 @@ public class TeacherDaoImpl extends UserDao implements pers.joy.dao.TeacherDao {
     }
 
     @Override
-    public List<User> queryAllTeacher() {
-        return queryAllUser(tableName);
+    public List<User> queryAllTeacher(int begin, int pageSize) {
+        return queryAllUser(tableName, begin, pageSize);
+    }
+
+    @Override
+    public String queryTeacherSum() {
+        return queryUserSum(tableName);
     }
 
     @Override

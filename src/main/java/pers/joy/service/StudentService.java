@@ -8,7 +8,9 @@ public interface StudentService{
 
     User signIn(User user);
 
-    List<User> getStudentList();
+    List<User> getStudentList(int pageNum, int pageSize);
+
+    String getStudentSum();
 
     int createStudent(User student);
 

@@ -16,9 +16,14 @@ public abstract class UserDao extends BaseDao{
         return queryForOne(User.class, sql, no);
     }
 
-    protected List<User> queryAllUser(String tableName) {
-        String sql = String.format("select * from %s", tableName);
-        return queryForList(User.class, sql);
+    protected List<User> queryAllUser(String tableName, int begin, int pageSize) {
+        String sql = String.format("select * from %s order by no limit ?, ?", tableName);
+        return queryForList(User.class, sql, begin, pageSize);
+    }
+
+    protected String queryUserSum(String tableName) {
+        String sql = String.format("select count(*) from %s", tableName);
+        return String.valueOf(queryForSingleValue(sql));
     }
 
     protected int insertUser(String tableName, User user) {

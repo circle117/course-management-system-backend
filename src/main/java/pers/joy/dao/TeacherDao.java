@@ -34,7 +34,13 @@ public interface TeacherDao{
      * query all teacher
      * @return list of teachers
      */
-    List<User> queryAllTeacher();
+    List<User> queryAllTeacher(int begin, int pageSize);
+
+    /**
+     * get the sum of teachers
+     * @return a string
+     */
+    String queryTeacherSum();
 
     /**
      * create new teacher

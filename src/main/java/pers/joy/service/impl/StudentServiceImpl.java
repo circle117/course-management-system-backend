@@ -17,8 +17,14 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public List<User> getStudentList() {
-        return studentDao.queryAllStudent();
+    public List<User> getStudentList(int pageNum, int pageSize) {
+        int begin = (pageNum-1)*pageSize;
+        return studentDao.queryAllStudent(begin, pageSize);
+    }
+
+    @Override
+    public String getStudentSum() {
+        return studentDao.queryStudentSum();
     }
 
     @Override

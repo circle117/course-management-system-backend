@@ -7,7 +7,9 @@ import java.util.List;
 public interface TeacherService{
     User signIn(User user);
 
-    List<User> getTeacherList();
+    List<User> getTeacherList(int pageNum, int pageSize);
+
+    String getTeacherSum();
 
     int createTeacher(User teacher);
 

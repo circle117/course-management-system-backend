@@ -18,8 +18,8 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public String getCourseSum(String courseCode) {
-        return courseDao.queryCourseSum(courseCode);
+    public String getCourseSumByCCode(String courseCode) {
+        return courseDao.queryCourseSumByCCode(courseCode);
     }
 
     @Override
@@ -34,8 +34,14 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public List<Course> getCourseList() {
-        return courseDao.queryAllCourse();
+    public List<Course> getCourseList(int pageNum, int pageSize) {
+        int begin = (pageNum-1)*pageSize;
+        return courseDao.queryAllCourse(begin, pageSize);
+    }
+
+    @Override
+    public String getCourseSum() {
+        return courseDao.queryCourseSum();
     }
 
     @Override

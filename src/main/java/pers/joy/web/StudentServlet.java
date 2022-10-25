@@ -58,7 +58,9 @@ public class StudentServlet extends BaseServlet{
         int pageSize = Integer.parseInt(request.getParameter("pageSize"));
         List<Course> courses = courseService.searchByCode(cCode, pageNum, pageSize);
         map.put("dataCourse", gson.toJson(courses));
-        map.put("pageCount", courseService.getCourseSum(cCode));
+        if (pageNum==1) {
+            map.put("pageCount", courseService.getCourseSumByCCode(cCode));
+        }
     }
 
     /**
@@ -109,7 +111,9 @@ public class StudentServlet extends BaseServlet{
         int pageNum = Integer.parseInt(request.getParameter("pageNum"));
         int pageSize = Integer.parseInt(request.getParameter("pageSize"));
         map.put("selectedCourses", gson.toJson(courseService.getSelectedCoursesInfo(sNo, pageNum, pageSize)));
-        map.put("pageCount", gradeService.getSelectedCourseSum(sNo));
+        if (pageNum==1) {
+            map.put("pageCount", gradeService.getSelectedCourseSum(sNo));
+        }
     }
 
     /**
