@@ -39,6 +39,16 @@ public class StudentServlet extends BaseServlet{
             map.put("status", "success");
             map.put("no", user.getNo());
             map.put("name", user.getName());
+            // HttpSession session = request.getSession();
+            // session.setAttribute("no", user.getNo());
+            Cookie cookie = new Cookie("username", username);
+            cookie.setDomain("localhost");
+            cookie.setMaxAge(60*60*24*7);
+            resp.addCookie(cookie);
+            Cookie cookie1 = new Cookie("type", "student");
+            cookie1.setDomain("localhost");
+            cookie1.setMaxAge(60*60*24*7);
+            resp.addCookie(cookie1);
         }
     }
 

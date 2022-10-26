@@ -28,6 +28,7 @@ public abstract class BaseServlet extends HttpServlet {
         }
 
         resp.setHeader("Access-Control-Allow-Origin", "http://localhost:8080");
+        resp.setHeader("Access-Control-Allow-Credentials", "true");
         resp.setContentType("application/json;charset=UTF-8");
         resp.getWriter().write(gson.toJson(map));
     }
