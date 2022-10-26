@@ -4,6 +4,16 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
 
+
+    <servlet>
+        <servlet-name>CommonServlet</servlet-name>
+        <servlet-class>pers.joy.web.CommonServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CommonServlet</servlet-name>
+        <url-pattern>/common</url-pattern>
+    </servlet-mapping>
+
     <servlet>
         <servlet-name>StudentServlet</servlet-name>
         <servlet-class>pers.joy.web.StudentServlet</servlet-class>

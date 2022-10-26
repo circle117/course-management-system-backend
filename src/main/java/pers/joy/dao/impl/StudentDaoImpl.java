@@ -26,6 +26,16 @@ public class StudentDaoImpl extends UserDao implements pers.joy.dao.StudentDao {
     }
 
     @Override
+    public List<User> queryStudentByName(String name, int begin, int pageSize) {
+        return queryUserByName(tableName, name, begin, pageSize);
+    }
+
+    @Override
+    public String queryStudentSumByName(String name) {
+        return queryUserSumByName(tableName, name);
+    }
+
+    @Override
     public User queryStudentBySNo(String sNo) {
         return queryUserByNo(tableName, sNo);
     }

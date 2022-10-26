@@ -1,8 +1,6 @@
 package pers.joy.web;
 
 import com.google.gson.Gson;
-import pers.joy.dao.CourseDao;
-import pers.joy.entity.Grade;
 import pers.joy.entity.User;
 import pers.joy.service.CourseService;
 import pers.joy.service.GradeService;
@@ -11,10 +9,7 @@ import pers.joy.service.impl.CourseServiceImpl;
 import pers.joy.service.impl.GradeServiceImpl;
 import pers.joy.service.impl.TeacherServiceImpl;
 
-import javax.servlet.*;
 import javax.servlet.http.*;
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -28,7 +23,7 @@ public class TeacherServlet extends BaseServlet {
     /**
      * teacher sign in
      */
-    protected void signIn(HttpServletRequest request, Map<String, String> map) {
+    protected void signIn(HttpServletRequest request, HttpServletResponse resp, Map<String, String> map) {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
@@ -45,7 +40,7 @@ public class TeacherServlet extends BaseServlet {
     /**
      * get course name list by teacher No
      */
-    protected void courseNameList(HttpServletRequest request, Map<String, String> map) {
+    protected void courseNameList(HttpServletRequest request, HttpServletResponse resp, Map<String, String> map) {
         String tNo = request.getParameter("no");
         List<Object> courseNameList = courseService.getCourseNameList(tNo);
 
@@ -56,7 +51,7 @@ public class TeacherServlet extends BaseServlet {
     /**
      * get a list of student who completed the course by course code and teacher No
      */
-    protected void completedCourseStudent(HttpServletRequest request, Map<String, String> map) {
+    protected void completedCourseStudent(HttpServletRequest request, HttpServletResponse resp, Map<String, String> map) {
         String cName = request.getParameter("cName");
         String tNo = request.getParameter("tNo");
 
@@ -66,14 +61,14 @@ public class TeacherServlet extends BaseServlet {
     /**
      * get a list of student who is taking the course by course code and teacher No
      */
-    protected void selectedCourseStudent(HttpServletRequest request, Map<String, String> map) {
+    protected void selectedCourseStudent(HttpServletRequest request, HttpServletResponse resp, Map<String, String> map) {
         String cName = request.getParameter("cName");
         String tNo = request.getParameter("tNo");
 
         map.put("selectedCourseStudent", gson.toJson(gradeService.getSelectedCourseStudent(cName, tNo)));
     }
 
-    protected void submitGrade(HttpServletRequest request, Map<String, String> map) {
+    protected void submitGrade(HttpServletRequest request, HttpServletResponse resp, Map<String, String> map) {
         String sNo = request.getParameter("sNo");
         String cName = request.getParameter("cName");
         String grade = request.getParameter("grade");

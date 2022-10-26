@@ -4,10 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-import pers.joy.dao.CourseDao;
-import pers.joy.dao.GradeDao;
-import pers.joy.dao.StudentDao;
-import pers.joy.entity.Course;
 import pers.joy.entity.Grade;
 import pers.joy.entity.User;
 import pers.joy.service.CourseService;
@@ -17,11 +13,8 @@ import pers.joy.service.impl.CourseServiceImpl;
 import pers.joy.service.impl.GradeServiceImpl;
 import pers.joy.service.impl.StudentServiceImpl;
 
-import javax.servlet.*;
 import javax.servlet.http.*;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -35,7 +28,7 @@ public class StudentServlet extends BaseServlet{
     /**
      * student sign in
      */
-    protected void signIn(HttpServletRequest request, Map<String, String> map) {
+    protected void signIn(HttpServletRequest request, HttpServletResponse resp, Map<String, String> map) {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
@@ -50,25 +43,11 @@ public class StudentServlet extends BaseServlet{
     }
 
     /**
-     * search course by course code
-     */
-    protected void searchCourse(HttpServletRequest request, Map<String, String> map) {
-        String cCode = request.getParameter("courseCode");
-        int pageNum = Integer.parseInt(request.getParameter("pageNum"));
-        int pageSize = Integer.parseInt(request.getParameter("pageSize"));
-        List<Course> courses = courseService.searchByCode(cCode, pageNum, pageSize);
-        map.put("dataCourse", gson.toJson(courses));
-        if (pageNum==1) {
-            map.put("pageCount", courseService.getCourseSumByCCode(cCode));
-        }
-    }
-
-    /**
      * select courses
      * must sign in
      * one student can only choose one course(course code) once.
      */
-    protected void selectCourse(HttpServletRequest request, Map<String, String> map) {
+    protected void selectCourse(HttpServletRequest request, HttpServletResponse resp, Map<String, String> map) {
         String sNo = request.getParameter("sNo");
         String jsonData = request.getParameter("course");
         JsonArray jsonArray = new JsonParser().parse(jsonData).getAsJsonArray();
@@ -95,7 +74,7 @@ public class StudentServlet extends BaseServlet{
     /**
      * get completed courses and GPA by student No
      */
-    protected void completedCourse(HttpServletRequest request, Map<String, String> map) {
+    protected void completedCourse(HttpServletRequest request, HttpServletResponse resp, Map<String, String> map) {
         String sNo = request.getParameter("sNo");
         List<Grade> gradeList = gradeService.getCompletedCourses(sNo);
         map.put("completedCourses", gson.toJson(gradeList));
@@ -106,7 +85,7 @@ public class StudentServlet extends BaseServlet{
     /**
      * get selected courses by student No
      */
-    protected void selectedCourse(HttpServletRequest request, Map<String, String> map) {
+    protected void selectedCourse(HttpServletRequest request, HttpServletResponse resp, Map<String, String> map) {
         String sNo = request.getParameter("sNo");
         int pageNum = Integer.parseInt(request.getParameter("pageNum"));
         int pageSize = Integer.parseInt(request.getParameter("pageSize"));
@@ -119,7 +98,7 @@ public class StudentServlet extends BaseServlet{
     /**
      * drop course by student No, course code and teacher No
      */
-    protected void dropCourse(HttpServletRequest request, Map<String, String> map) {
+    protected void dropCourse(HttpServletRequest request, HttpServletResponse resp, Map<String, String> map) {
         String sNo = request.getParameter("sNo");
         String jsonData = request.getParameter("dropCourse");
         JsonArray jsonArray = new JsonParser().parse(jsonData).getAsJsonArray();

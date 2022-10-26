@@ -26,6 +26,19 @@ public abstract class UserDao extends BaseDao{
         return String.valueOf(queryForSingleValue(sql));
     }
 
+    protected List<User> queryUserByName(String tableName, String name, int begin, int pageSize) {
+        String sql = String.format("select * from %s where name like ? order by no limit ?, ?", tableName);
+        name = "%"+name+"%";
+        return queryForList(User.class, sql, name, begin, pageSize);
+    }
+
+    protected String queryUserSumByName(String tableName, String name) {
+        String sql = String.format("select count(*) from %s where name like ?", tableName);
+        name = "%"+name+"%";
+        return String.valueOf(queryForSingleValue(sql, name));
+
+    }
+
     protected int insertUser(String tableName, User user) {
         String sql = String.format("insert into %s values(?,?,?,?,?,?,?)", tableName);
         return update(sql, user.getNo(), user.getName(), user.getDepartment(), user.getGender(),

@@ -28,6 +28,17 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    public List<User> getStudentListByName(String name, int pageNum, int pageSize) {
+        int begin = (pageNum-1)*pageSize;
+        return studentDao.queryStudentByName(name, begin, pageSize);
+    }
+
+    @Override
+    public String getStudentSumByName(String name) {
+        return studentDao.queryStudentSumByName(name);
+    }
+
+    @Override
     public int createStudent(User student) {
         if (studentDao.queryStudentBySNo(student.getNo())!=null) {
             return -1;

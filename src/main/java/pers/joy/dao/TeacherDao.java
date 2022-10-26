@@ -3,7 +3,6 @@ package pers.joy.dao;
 import pers.joy.entity.User;
 
 import java.util.List;
-import java.util.Map;
 
 public interface TeacherDao{
 
@@ -41,6 +40,19 @@ public interface TeacherDao{
      * @return a string
      */
     String queryTeacherSum();
+
+    /**
+     * query teachers by teacher name
+     * @param name teacher name
+     * @return list of User object
+     */
+    List<User> queryTeacherByName(String name, int begin, int pageSize);
+
+    /**
+     * get the sum of teachers by name
+     * @return a string
+     */
+    String queryTeacherSumByName(String name);
 
     /**
      * create new teacher

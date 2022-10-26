@@ -12,6 +12,10 @@ public interface StudentService{
 
     String getStudentSum();
 
+    List<User> getStudentListByName(String name, int pageNum, int pageSize);
+
+    String getStudentSumByName(String name);
+
     int createStudent(User student);
 
     int editStudent(User student);

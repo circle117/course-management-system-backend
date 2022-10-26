@@ -13,6 +13,7 @@ import java.util.Map;
 
 public abstract class BaseServlet extends HttpServlet {
     private final Gson gson = new Gson();
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String action = req.getParameter("action");
@@ -20,8 +21,8 @@ public abstract class BaseServlet extends HttpServlet {
 
         try {
             Method method = this.getClass().getDeclaredMethod(action,
-                    HttpServletRequest.class, Map.class);
-            method.invoke(this, req, map);
+                    HttpServletRequest.class, HttpServletResponse.class, Map.class);
+            method.invoke(this, req, resp, map);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -30,4 +31,5 @@ public abstract class BaseServlet extends HttpServlet {
         resp.setContentType("application/json;charset=UTF-8");
         resp.getWriter().write(gson.toJson(map));
     }
+
 }

@@ -32,6 +32,17 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
+    public List<User> getTeacherListByName(String name, int pageNum, int pageSize) {
+        int begin = (pageNum-1)*pageSize;
+        return teacherDao.queryTeacherByName(name, begin, pageSize);
+    }
+
+    @Override
+    public String getTeacherSumByName(String name) {
+        return teacherDao.queryTeacherSumByName(name);
+    }
+
+    @Override
     public int createTeacher(User teacher) {
         if (teacherDao.queryTeacherByTNo(teacher.getNo())!=null) {
             return -1;

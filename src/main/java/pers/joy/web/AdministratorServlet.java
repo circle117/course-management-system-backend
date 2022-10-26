@@ -9,10 +9,7 @@ import pers.joy.entity.User;
 import pers.joy.service.*;
 import pers.joy.service.impl.*;
 
-import javax.servlet.*;
 import javax.servlet.http.*;
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +23,7 @@ public class AdministratorServlet extends BaseServlet {
     private final CourseService courseService = new CourseServiceImpl();
     private final Gson gson = new Gson();
 
-    protected void signIn(HttpServletRequest request, Map<String, String> map) {
+    protected void signIn(HttpServletRequest request, HttpServletResponse resp, Map<String, String> map) {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
@@ -43,22 +40,22 @@ public class AdministratorServlet extends BaseServlet {
     /**
      * grade management
      */
-    protected void getAllCourseNameList(HttpServletRequest request, Map<String, String> map) {
+    protected void getAllCourseNameList(HttpServletRequest request, HttpServletResponse resp, Map<String, String> map) {
         List<Object> courseNameList = courseService.getAllCourseNameList();
         map.put("courseNameList", gson.toJson(courseNameList));
     }
 
-    protected void completedCourseStudent(HttpServletRequest request, Map<String, String> map) {
+    protected void completedCourseStudent(HttpServletRequest request, HttpServletResponse resp, Map<String, String> map) {
         String cName = request.getParameter("cName");
         map.put("completedCourseStudent", gson.toJson(gradeService.getCompletedCourseStudent(cName)));
     }
 
-    protected void selectedCourseStudent(HttpServletRequest request, Map<String, String> map) {
+    protected void selectedCourseStudent(HttpServletRequest request, HttpServletResponse resp, Map<String, String> map) {
         String cName = request.getParameter("cName");
         map.put("selectedCourseStudent", gson.toJson(gradeService.getSelectedCourseStudent(cName)));
     }
 
-    protected void submitGrade(HttpServletRequest request, Map<String, String> map) {
+    protected void submitGrade(HttpServletRequest request, HttpServletResponse resp, Map<String, String> map) {
         String sNo = request.getParameter("sNo");
         String cName = request.getParameter("cName");
         String grade = request.getParameter("grade");
@@ -74,7 +71,7 @@ public class AdministratorServlet extends BaseServlet {
     /**
      * course management
      */
-    protected void getCourseList(HttpServletRequest request, Map<String, String> map) {
+    protected void getCourseList(HttpServletRequest request, HttpServletResponse resp, Map<String, String> map) {
         int pageNum = Integer.parseInt(request.getParameter("pageNum"));
         int pageSize = Integer.parseInt(request.getParameter("pageSize"));
         List<Course> courseList = courseService.getCourseList(pageNum, pageSize);
@@ -84,7 +81,7 @@ public class AdministratorServlet extends BaseServlet {
         }
     }
 
-    protected void createCourse(HttpServletRequest request, Map<String, String> map) {
+    protected void createCourse(HttpServletRequest request, HttpServletResponse resp, Map<String, String> map) {
         Course course = gson.fromJson(request.getParameter("newCourse"), Course.class);
         int res = courseService.createCourse(course);
         if (res > 0) {
@@ -96,7 +93,7 @@ public class AdministratorServlet extends BaseServlet {
         }
     }
 
-    protected void addTeacher(HttpServletRequest request, Map<String, String> map) {
+    protected void addTeacher(HttpServletRequest request, HttpServletResponse resp, Map<String, String> map) {
         String courseCode = request.getParameter("cCode");
         String jsonData = request.getParameter("teacherList");
         JsonArray jsonArray = new JsonParser().parse(jsonData).getAsJsonArray();
@@ -114,7 +111,7 @@ public class AdministratorServlet extends BaseServlet {
         }
     }
 
-    protected void editCourse(HttpServletRequest request, Map<String, String> map) {
+    protected void editCourse(HttpServletRequest request, HttpServletResponse resp, Map<String, String> map) {
         Course course = gson.fromJson(request.getParameter("editCourse"), Course.class);
 
         int res = courseService.editCourse(course);
@@ -125,7 +122,7 @@ public class AdministratorServlet extends BaseServlet {
         }
     }
 
-    protected void deleteCourse(HttpServletRequest request, Map<String, String> map) {
+    protected void deleteCourse(HttpServletRequest request, HttpServletResponse resp, Map<String, String> map) {
         Course course = gson.fromJson(request.getParameter("course"), Course.class);
 
         int res = courseService.deleteCourse(course);
@@ -139,7 +136,7 @@ public class AdministratorServlet extends BaseServlet {
     /**
      * student management
      */
-    protected void getStudentList(HttpServletRequest request, Map<String, String> map) {
+    protected void getStudentList(HttpServletRequest request, HttpServletResponse resp, Map<String, String> map) {
         int pageNum = Integer.parseInt(request.getParameter("pageNum"));
         int pageSize = Integer.parseInt(request.getParameter("pageSize"));
         List<User> userList = studentService.getStudentList(pageNum, pageSize);
@@ -149,7 +146,18 @@ public class AdministratorServlet extends BaseServlet {
         }
     }
 
-    protected void createStudent(HttpServletRequest request, Map<String, String> map) {
+    protected void searchStudent(HttpServletRequest request, HttpServletResponse resp, Map<String, String> map) {
+        String name = request.getParameter("sName");
+        int pageNum = Integer.parseInt(request.getParameter("pageNum"));
+        int pageSize = Integer.parseInt(request.getParameter("pageSize"));
+        List<User> studentList = studentService.getStudentListByName(name, pageNum, pageSize);
+        map.put("dataStudent", gson.toJson(studentList));
+        if (pageNum==1) {
+            map.put("pageCount", studentService.getStudentSumByName(name));
+        }
+    }
+
+    protected void createStudent(HttpServletRequest request, HttpServletResponse resp, Map<String, String> map) {
         User student = gson.fromJson(request.getParameter("newStudent"), User.class);
 
         int res = studentService.createStudent(student);
@@ -160,7 +168,7 @@ public class AdministratorServlet extends BaseServlet {
         }
     }
 
-    protected void editStudent(HttpServletRequest request, Map<String, String> map) {
+    protected void editStudent(HttpServletRequest request, HttpServletResponse resp, Map<String, String> map) {
         User student = gson.fromJson(request.getParameter("editStudent"), User.class);
 
         int res = studentService.editStudent(student);
@@ -171,7 +179,7 @@ public class AdministratorServlet extends BaseServlet {
         }
     }
 
-    protected void deleteStudent(HttpServletRequest request, Map<String, String> map) {
+    protected void deleteStudent(HttpServletRequest request, HttpServletResponse resp, Map<String, String> map) {
         String sNo = request.getParameter("sNo");
 
         int res = studentService.deleteStudent(sNo);
@@ -186,7 +194,7 @@ public class AdministratorServlet extends BaseServlet {
     /**
      * teacher management
      */
-    protected void getTeacherList(HttpServletRequest request, Map<String, String> map) {
+    protected void getTeacherList(HttpServletRequest request, HttpServletResponse resp, Map<String, String> map) {
         int pageNum = Integer.parseInt(request.getParameter("pageNum"));
         int pageSize = Integer.parseInt(request.getParameter("pageSize"));
         List<User> teacherList = teacherService.getTeacherList(pageNum, pageSize);
@@ -196,7 +204,18 @@ public class AdministratorServlet extends BaseServlet {
         }
     }
 
-    protected void createTeacher(HttpServletRequest request, Map<String, String> map) {
+    protected void searchTeacher(HttpServletRequest request, HttpServletResponse resp, Map<String, String> map) {
+        String name = request.getParameter("tName");
+        int pageNum = Integer.parseInt(request.getParameter("pageNum"));
+        int pageSize = Integer.parseInt(request.getParameter("pageSize"));
+        List<User> teacherList = teacherService.getTeacherListByName(name, pageNum, pageSize);
+        map.put("dataTeacher", gson.toJson(teacherList));
+        if (pageNum==1) {
+            map.put("pageCount", teacherService.getTeacherSumByName(name));
+        }
+    }
+
+    protected void createTeacher(HttpServletRequest request, HttpServletResponse resp, Map<String, String> map) {
         User teacher = gson.fromJson(request.getParameter("newTeacher"), User.class);
 
         int res = teacherService.createTeacher(teacher);
@@ -207,7 +226,7 @@ public class AdministratorServlet extends BaseServlet {
         }
     }
 
-    protected void editTeacher(HttpServletRequest request, Map<String, String> map) {
+    protected void editTeacher(HttpServletRequest request, HttpServletResponse resp, Map<String, String> map) {
         User teacher = gson.fromJson(request.getParameter("editTeacher"), User.class);
 
         int res = teacherService.editTeacher(teacher);
@@ -218,7 +237,7 @@ public class AdministratorServlet extends BaseServlet {
         }
     }
 
-    protected void deleteTeacher(HttpServletRequest request, Map<String, String> map) {
+    protected void deleteTeacher(HttpServletRequest request, HttpServletResponse resp, Map<String, String> map) {
         String tNo = request.getParameter("tNo");
 
         int res = teacherService.deleteTeacher(tNo);
