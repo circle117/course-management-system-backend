@@ -21,31 +21,6 @@ public class TeacherServlet extends BaseServlet {
     private final Gson gson = new Gson();
 
     /**
-     * teacher sign in
-     */
-    protected void signIn(HttpServletRequest request, HttpServletResponse resp, Map<String, String> map) {
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-
-        User user = teacherService.signIn(new User(null, username, password));
-        if (user == null) {
-            map.put("status", "fail");
-        } else {
-            map.put("status", "success");
-            map.put("no", user.getNo());
-            map.put("name", user.getName());
-            Cookie cookie = new Cookie("username", username);
-            cookie.setDomain("localhost");
-            cookie.setMaxAge(60*60*24*7);
-            resp.addCookie(cookie);
-            Cookie cookie1 = new Cookie("type", "student");
-            cookie1.setDomain("localhost");
-            cookie1.setMaxAge(60*60*24*7);
-            resp.addCookie(cookie1);
-        }
-    }
-
-    /**
      * get course name list by teacher No
      */
     protected void courseNameList(HttpServletRequest request, HttpServletResponse resp, Map<String, String> map) {

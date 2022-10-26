@@ -5,7 +5,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import pers.joy.entity.Grade;
-import pers.joy.entity.User;
 import pers.joy.service.CourseService;
 import pers.joy.service.GradeService;
 import pers.joy.service.StudentService;
@@ -20,37 +19,9 @@ import java.util.Map;
 
 public class StudentServlet extends BaseServlet{
 
-    private final StudentService studentService = new StudentServiceImpl();
     private final CourseService courseService = new CourseServiceImpl();
     private final GradeService gradeService = new GradeServiceImpl();
     private final Gson gson = new Gson();
-
-    /**
-     * student sign in
-     */
-    protected void signIn(HttpServletRequest request, HttpServletResponse resp, Map<String, String> map) {
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-
-        User user = studentService.signIn(new User(null, username, password));
-        if (user == null) {
-            map.put("status", "fail");
-        } else {
-            map.put("status", "success");
-            map.put("no", user.getNo());
-            map.put("name", user.getName());
-            // HttpSession session = request.getSession();
-            // session.setAttribute("no", user.getNo());
-            Cookie cookie = new Cookie("username", username);
-            cookie.setDomain("localhost");
-            cookie.setMaxAge(60*60*24*7);
-            resp.addCookie(cookie);
-            Cookie cookie1 = new Cookie("type", "student");
-            cookie1.setDomain("localhost");
-            cookie1.setMaxAge(60*60*24*7);
-            resp.addCookie(cookie1);
-        }
-    }
 
     /**
      * select courses
