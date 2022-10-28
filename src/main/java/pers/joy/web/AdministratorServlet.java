@@ -1,9 +1,7 @@
 package pers.joy.web;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
 import pers.joy.entity.Course;
 import pers.joy.entity.User;
 import pers.joy.service.*;
@@ -82,11 +80,8 @@ public class AdministratorServlet extends BaseServlet {
     protected void addTeacher(HttpServletRequest request, HttpServletResponse resp, Map<String, String> map) {
         String courseCode = request.getParameter("cCode");
         String jsonData = request.getParameter("teacherList");
-        JsonArray jsonArray = new JsonParser().parse(jsonData).getAsJsonArray();
-        List<String> teacherList = new LinkedList<>();
-        for (JsonElement jsonElement : jsonArray) {
-            teacherList.add(gson.fromJson(jsonElement, String.class));
-        }
+        List<String> teacherList;
+        teacherList = gson.fromJson(jsonData, new TypeToken<LinkedList<String>>(){}.getType());
 
         List<String> failTeacherNo = courseService.addTeacher(courseCode, teacherList);
         if (failTeacherNo.size() == 0) {

@@ -4,13 +4,13 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
+import pers.joy.dao.GradeDao;
 import pers.joy.entity.Grade;
 import pers.joy.service.CourseService;
 import pers.joy.service.GradeService;
-import pers.joy.service.StudentService;
 import pers.joy.service.impl.CourseServiceImpl;
 import pers.joy.service.impl.GradeServiceImpl;
-import pers.joy.service.impl.StudentServiceImpl;
 
 import javax.servlet.http.*;
 import java.util.ArrayList;
@@ -31,12 +31,10 @@ public class StudentServlet extends BaseServlet{
     protected void selectCourse(HttpServletRequest request, HttpServletResponse resp, Map<String, String> map) {
         String sNo = request.getParameter("sNo");
         String jsonData = request.getParameter("course");
-        JsonArray jsonArray = new JsonParser().parse(jsonData).getAsJsonArray();
-        List<Grade> gradeList = new ArrayList<>();
-        for (JsonElement jsonElement:jsonArray) {
-            Grade grade = gson.fromJson(jsonElement, Grade.class);
+        List<Grade> gradeList;
+        gradeList = gson.fromJson(jsonData, new TypeToken<ArrayList<Grade>>(){}.getType());
+        for (Grade grade: gradeList) {
             grade.setSNo(sNo);
-            gradeList.add(grade);
         }
 
         if (sNo==null) {
@@ -82,12 +80,10 @@ public class StudentServlet extends BaseServlet{
     protected void dropCourse(HttpServletRequest request, HttpServletResponse resp, Map<String, String> map) {
         String sNo = request.getParameter("sNo");
         String jsonData = request.getParameter("dropCourse");
-        JsonArray jsonArray = new JsonParser().parse(jsonData).getAsJsonArray();
-        List<Grade> gradeList = new ArrayList<>();
-        for (JsonElement jsonElement:jsonArray) {
-            Grade grade = gson.fromJson(jsonElement, Grade.class);
+        List<Grade> gradeList;
+        gradeList = gson.fromJson(jsonData, new TypeToken<ArrayList<Grade>>(){}.getType());
+        for (Grade grade: gradeList) {
             grade.setSNo(sNo);
-            gradeList.add(grade);
         }
 
         gradeService.dropCourse(gradeList);
