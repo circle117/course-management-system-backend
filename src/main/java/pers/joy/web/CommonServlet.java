@@ -71,8 +71,8 @@ public class CommonServlet extends BaseServlet {
             CookieUtils.createCookie(resp, "type", type, "localhost", maxAge);
 
             HttpSession session = request.getSession();
-            session.setAttribute("no", user.getNo());
-            session.setAttribute("name", user.getName());
+            session.setAttribute("user", user);
+            session.setAttribute("type", type);
         }
     }
 
