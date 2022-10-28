@@ -25,6 +25,7 @@ public abstract class BaseServlet extends HttpServlet {
             method.invoke(this, req, resp, map);
         } catch (Exception e) {
             e.printStackTrace();
+            throw new RuntimeException(e);
         }
 
         resp.setHeader("Access-Control-Allow-Origin", "http://localhost:8080");

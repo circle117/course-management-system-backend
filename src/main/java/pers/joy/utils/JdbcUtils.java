@@ -11,6 +11,7 @@ import java.util.Properties;
 public class JdbcUtils {
 
     private static DruidDataSource dataSource;
+    private static ThreadLocal<Connection> conns = new ThreadLocal<>();
 
     static {
         try {
@@ -31,28 +32,58 @@ public class JdbcUtils {
      * @return if return null, connection fails
      */
     public static Connection getConnection(){
-        Connection conn = null;
+        Connection conn = conns.get();
 
-        try {
-            conn = dataSource.getConnection();
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (conn==null) {
+            try {
+                conn = dataSource.getConnection();
+                conns.set(conn);
+                conn.setAutoCommit(false);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         return conn;
     }
 
-    /**
-     * close connection to the database
-     * @param conn
-     */
-    public static void closeConnection(Connection conn){
-        if (conn != null) {
+    public static void commitAndClose(){
+        Connection conn = conns.get();
+
+        if (conn!=null) {
             try {
-                conn.close();
+                conn.commit();
             } catch (SQLException e) {
                 e.printStackTrace();
+            } finally {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
         }
+
+        conns.remove();
+    }
+
+    public static void rollbackAndClose(){
+        Connection conn = conns.get();
+
+        if (conn!=null) {
+            try {
+                conn.rollback();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        conns.remove();
     }
 }
