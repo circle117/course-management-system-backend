@@ -1,15 +1,22 @@
 package pers.joy.service.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import pers.joy.dao.CourseDao;
-import pers.joy.dao.impl.CourseDaoImpl;
 import pers.joy.entity.Course;
 import pers.joy.service.CourseService;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class CourseServiceImpl implements CourseService {
-    private final CourseDao courseDao = new CourseDaoImpl();
+    private final CourseDao courseDao;
+
+    @Autowired
+    public CourseServiceImpl(CourseDao courseDao) {
+        this.courseDao = courseDao;
+    }
 
     @Override
     public List<Course> searchByCode(String courseCode, int pageNum, int pageSize) {

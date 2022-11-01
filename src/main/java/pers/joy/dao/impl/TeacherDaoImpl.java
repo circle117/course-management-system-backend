@@ -1,11 +1,11 @@
 package pers.joy.dao.impl;
 
+import org.springframework.stereotype.Repository;
 import pers.joy.entity.User;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
+@Repository
 public class TeacherDaoImpl extends UserDao implements pers.joy.dao.TeacherDao {
 
     private final String tableName = "teacher";

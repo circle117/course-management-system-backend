@@ -1,12 +1,14 @@
 package pers.joy.web;
 
-import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import org.springframework.context.ApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 import pers.joy.entity.Course;
 import pers.joy.entity.User;
 import pers.joy.service.*;
 import pers.joy.service.impl.*;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.*;
 import java.util.LinkedList;
 import java.util.List;
@@ -14,12 +16,21 @@ import java.util.Map;
 
 public class AdministratorServlet extends BaseServlet {
 
-    private final AdministratorService administratorService = new AdministratorServiceImpl();
-    private final TeacherService teacherService = new TeacherServiceImpl();
-    private final StudentService studentService = new StudentServiceImpl();
-    private final GradeService gradeService = new GradeServiceImpl();
-    private final CourseService courseService = new CourseServiceImpl();
-    private final Gson gson = new Gson();
+    private TeacherService teacherService;
+    private StudentService studentService;
+    private GradeService gradeService;
+    private CourseService courseService;
+
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
+        assert context != null;
+        teacherService = context.getBean(TeacherService.class);
+        studentService = context.getBean(StudentService.class);
+        gradeService = context.getBean(GradeService.class);
+        courseService = context.getBean(CourseService.class);
+    }
 
     /**
      * grade management

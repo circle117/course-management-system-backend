@@ -1,13 +1,12 @@
 package pers.joy.dao.impl;
 
-import com.google.gson.Gson;
+import org.springframework.stereotype.Repository;
 import pers.joy.dao.CourseDao;
 import pers.joy.entity.Course;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
+@Repository
 public class CourseDaoImpl extends BaseDao implements CourseDao {
 
     @Override

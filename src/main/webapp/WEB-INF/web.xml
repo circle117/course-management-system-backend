@@ -4,6 +4,16 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
 
+    <!-- context -->
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath:applicationContext.xml</param-value>
+    </context-param>
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+
+    <!-- Servlet -->
     <servlet>
         <servlet-name>CommonServlet</servlet-name>
         <servlet-class>pers.joy.web.CommonServlet</servlet-class>
@@ -40,8 +50,7 @@
         <url-pattern>/administrator</url-pattern>
     </servlet-mapping>
 
-
-
+    <!--servlet-->
     <filter>
         <filter-name>AdminFilter</filter-name>
         <filter-class>pers.joy.filter.AdminFilter</filter-class>
