@@ -44,7 +44,7 @@ public interface CourseDao {
      * query all the course names
      * @return list of course names (String)
      */
-    List<Object> queryCourseName();
+    List<String> queryCourseName();
 
     /**
      * add new course
@@ -116,7 +116,7 @@ public interface CourseDao {
      * @param tNo teacher number
      * @return list of course names
      */
-    List<Object> queryCourseNameListForTeacher(String tNo);
+    List<String> queryCourseNameListForTeacher(String tNo);
 
 
 

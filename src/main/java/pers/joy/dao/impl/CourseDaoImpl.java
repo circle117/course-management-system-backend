@@ -14,15 +14,13 @@ public class CourseDaoImpl extends BaseDao implements CourseDao {
         String sql = "select `cCode`, `cName`, `credit`, `cDept`, `name` as `tName`, course.`tNo`" +
                 "from course inner join teacher on course.tNo = teacher.no where cCode like ? " +
                 "order by cCode limit ?, ?";
-        courseCode = "%"+courseCode+"%";
-        return queryForList(Course.class, sql, courseCode, begin, pageSize);
+        return queryForList(Course.class, sql, "%"+courseCode+"%", begin, pageSize);
     }
 
     @Override
     public String queryCourseSumByCCode(String courseCode) {
         String sql = "select count(*) from course where cCode like ?";
-        courseCode = "%"+courseCode+"%";
-        return String.valueOf(queryForSingleValue(sql, courseCode));
+        return queryForSingleValue(String.class, "%"+courseCode+"%");
     }
 
     @Override
@@ -44,13 +42,13 @@ public class CourseDaoImpl extends BaseDao implements CourseDao {
     @Override
     public String queryCourseSum() {
         String sql = "select count(*) from course";
-        return String.valueOf(queryForSingleValue(sql));
+        return queryForSingleValue(String.class, sql);
     }
 
     @Override
-    public List<Object> queryCourseName() {
+    public List<String> queryCourseName() {
         String sql = "select distinct `cName` from course order by cName";
-        return queryForColumnList(sql);
+        return queryForColumnList(String.class, sql);
     }
 
     @Override
@@ -89,7 +87,7 @@ public class CourseDaoImpl extends BaseDao implements CourseDao {
     @Override
     public Course existNoTeacherCourse(String courseCode) {
         String sql = "select * from course where cCode = ? and tNo is null";
-        return queryForOne(Course.class, sql, courseCode);
+        return queryForObject(Course.class, sql, courseCode);
     }
 
     @Override
@@ -101,24 +99,24 @@ public class CourseDaoImpl extends BaseDao implements CourseDao {
     @Override
     public Course queryCourseInfoByCCode(String courseCode) {
         String sql = "select cCode, cName, credit, cDept from course where cCode = ?";
-        return queryForOne(Course.class, sql, courseCode);
+        return queryForObject(Course.class, sql, courseCode);
     }
 
     @Override
     public Course queryCourseByCCodeAndTNo(String courseCode, String tNo) {
         String sql = "select * from course where cCode = ? and tNo = ?";
-        return queryForOne(Course.class, sql, courseCode, tNo);
+        return queryForObject(Course.class, sql, courseCode, tNo);
     }
 
     @Override
     public String queryCCodeByName(String cName) {
         String sql = "select `cCode` from course where cName = ?";
-        return (String) queryForSingleValue(sql, cName);
+        return queryForSingleValue(String.class, sql, cName);
     }
 
     @Override
-    public List<Object> queryCourseNameListForTeacher(String tNo) {
+    public List<String> queryCourseNameListForTeacher(String tNo) {
         String sql = "select `cName` from course where tNo = ? order by cName";
-        return queryForColumnList(sql, tNo);
+        return queryForColumnList(String.class, sql, tNo);
     }
 }

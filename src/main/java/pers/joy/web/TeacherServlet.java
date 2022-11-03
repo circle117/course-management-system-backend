@@ -29,7 +29,7 @@ public class TeacherServlet extends BaseServlet {
      */
     protected void courseNameList(HttpServletRequest request, HttpServletResponse resp, Map<String, String> map) {
         String tNo = request.getParameter("no");
-        List<Object> courseNameList = courseService.getCourseNameList(tNo);
+        List<String> courseNameList = courseService.getCourseNameList(tNo);
 
         map.put("courseNameList", gson.toJson(courseNameList));
     }

@@ -36,7 +36,7 @@ public class AdministratorServlet extends BaseServlet {
      * grade management
      */
     protected void getAllCourseNameList(HttpServletRequest request, HttpServletResponse resp, Map<String, String> map) {
-        List<Object> courseNameList = courseService.getAllCourseNameList();
+        List<String> courseNameList = courseService.getAllCourseNameList();
         map.put("courseNameList", gson.toJson(courseNameList));
     }
 

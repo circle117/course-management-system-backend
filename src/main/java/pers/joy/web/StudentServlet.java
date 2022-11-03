@@ -3,12 +3,9 @@ package pers.joy.web;
 import com.google.gson.reflect.TypeToken;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
-import pers.joy.entity.Course;
 import pers.joy.entity.Grade;
 import pers.joy.service.CourseService;
 import pers.joy.service.GradeService;
-import pers.joy.service.impl.CourseServiceImpl;
-import pers.joy.service.impl.GradeServiceImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
@@ -40,6 +37,7 @@ public class StudentServlet extends BaseServlet{
         String jsonData = request.getParameter("course");
         List<Grade> gradeList;
         gradeList = gson.fromJson(jsonData, new TypeToken<ArrayList<Grade>>(){}.getType());
+
         for (Grade grade: gradeList) {
             grade.setSNo(sNo);
         }

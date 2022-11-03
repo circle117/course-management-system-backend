@@ -36,7 +36,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public List<Object> getCourseNameList(String tNo) {
+    public List<String> getCourseNameList(String tNo) {
         return courseDao.queryCourseNameListForTeacher(tNo);
     }
 
@@ -52,7 +52,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public List<Object> getAllCourseNameList() {
+    public List<String> getAllCourseNameList() {
         return courseDao.queryCourseName();
     }
 
