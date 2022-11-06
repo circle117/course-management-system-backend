@@ -1,73 +1,70 @@
 package pers.joy.dao.impl;
 
-import org.apache.commons.dbutils.QueryRunner;
-import org.apache.commons.dbutils.handlers.BeanHandler;
-import org.apache.commons.dbutils.handlers.BeanListHandler;
-import org.apache.commons.dbutils.handlers.ColumnListHandler;
-import org.apache.commons.dbutils.handlers.ScalarHandler;
-import pers.joy.utils.JdbcUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
 
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.List;
 
 public abstract class BaseDao {
 
-    private QueryRunner queryRunner = new QueryRunner();
+    private JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
     /**
      * insert, update, delete sql
-     *
      * @return -1: fail, otherwise: affected row number
      */
     public int update(String sql, Object... args){
-        Connection connection = JdbcUtils.getConnection();
         try {
-            return queryRunner.update(connection, sql, args);
-        } catch (SQLException e) {
+            return jdbcTemplate.update(sql, args);
+        } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException(e);
         }
+
+        return -1;
     }
 
-    public <T> T queryForOne(Class<T> type, String sql, Object ... args){
-        Connection connection = JdbcUtils.getConnection();
+    public <T> T queryForObject(Class<T> type, String sql, Object ... args){
         try {
-            return queryRunner.query(connection, sql, new BeanHandler<T>(type), args);
-        } catch (SQLException e) {
+            return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(type), args);
+        } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException(e);
         }
+
+        return null;
     }
 
     public <T> List<T> queryForList(Class<T> type, String sql, Object ... args){
-        Connection connection = JdbcUtils.getConnection();
         try {
-            return queryRunner.query(connection, sql, new BeanListHandler<T>(type), args);
-        } catch (SQLException e) {
+            return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(type), args);
+        } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException(e);
         }
+        return null;
     }
 
-    public Object queryForSingleValue(String sql, Object ... args){
-        Connection connection = JdbcUtils.getConnection();
-
+    public <T> T queryForSingleValue(Class<T> type, String sql, Object ... args){
         try {
-            return queryRunner.query(connection, sql, new ScalarHandler(), args);
-        } catch (SQLException e) {
+            return jdbcTemplate.queryForObject(sql, type, args);
+        } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException(e);
         }
+
+        return null;
     }
 
-    public List<Object> queryForColumnList(String sql, Object ... args){
-        Connection connection = JdbcUtils.getConnection();
+    public <T> List<T> queryForColumnList(Class<T> type, String sql, Object ... args){
         try {
-            return queryRunner.query(connection, sql, new ColumnListHandler<>(), args);
-        } catch (SQLException e) {
+            return jdbcTemplate.queryForList(sql, type, args);
+        } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException(e);
         }
+
+        return null;
     }
 }

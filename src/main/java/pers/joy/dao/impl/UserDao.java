@@ -4,16 +4,16 @@ import pers.joy.entity.User;
 
 import java.util.List;
 
-public abstract class UserDao extends BaseDao{
+public abstract class UserDao extends BaseDao {
 
     protected User queryUserByUsernameAndPassword(String tableName, String username, String password) {
         String sql = String.format("select `no`, `name` from %s where username = ? and password = ?", tableName);
-        return queryForOne(User.class, sql, username, password);
+        return queryForObject(User.class, sql, username, password);
     }
 
     protected User queryUserByNo(String tableName, String no) {
         String sql = String.format("select * from %s where no = ?", tableName);
-        return queryForOne(User.class, sql, no);
+        return queryForObject(User.class, sql, no);
     }
 
     protected List<User> queryAllUser(String tableName, int begin, int pageSize) {
@@ -23,7 +23,7 @@ public abstract class UserDao extends BaseDao{
 
     protected String queryUserSum(String tableName) {
         String sql = String.format("select count(*) from %s", tableName);
-        return String.valueOf(queryForSingleValue(sql));
+        return queryForSingleValue(String.class, sql);
     }
 
     protected List<User> queryUserByName(String tableName, String name, int begin, int pageSize) {
@@ -34,8 +34,7 @@ public abstract class UserDao extends BaseDao{
 
     protected String queryUserSumByName(String tableName, String name) {
         String sql = String.format("select count(*) from %s where name like ?", tableName);
-        name = "%"+name+"%";
-        return String.valueOf(queryForSingleValue(sql, name));
+        return queryForSingleValue(String.class, sql, "%"+name+"%");
 
     }
 

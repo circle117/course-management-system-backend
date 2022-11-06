@@ -1,25 +1,31 @@
 package pers.joy.web;
 
-import com.google.gson.Gson;
+import org.springframework.context.ApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 import pers.joy.entity.Course;
 import pers.joy.entity.User;
 import pers.joy.service.CourseService;
-import pers.joy.service.StudentService;
-import pers.joy.service.impl.CourseServiceImpl;
-import pers.joy.service.impl.StudentServiceImpl;
 import pers.joy.utils.CookieUtils;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.*;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 
 public class CommonServlet extends BaseServlet {
-    private final CourseService courseService = new CourseServiceImpl();
-    private final StudentService studentService = new StudentServiceImpl();
-    private final Gson gson = new Gson();
+
+    private CourseService courseService;
+    private ApplicationContext context;
     private final static int maxAge = 60 * 60 * 24 * 7;
+
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        context = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
+        assert context != null;
+        courseService = context.getBean(CourseService.class);
+    }
 
     /**
      * search course by course code
@@ -53,9 +59,8 @@ public class CommonServlet extends BaseServlet {
         User user = null;
         try {
             assert serviceClass != null;
-            Constructor<?> con = serviceClass.getConstructor();
             Method method = serviceClass.getDeclaredMethod("signIn", User.class);
-            user = (User) method.invoke(con.newInstance(), new User(null, username, password));
+            user = (User) method.invoke(context.getBean(serviceClass), new User(null, username, password));
         } catch (Exception e) {
             e.printStackTrace();
         }

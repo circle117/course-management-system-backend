@@ -11,11 +11,11 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class BaseServlet extends HttpServlet {
-    private final Gson gson = new Gson();
+public class BaseServlet extends HttpServlet {
+    protected final Gson gson = new Gson();
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String action = req.getParameter("action");
         Map<String, String> map = new HashMap<>();
 
@@ -33,5 +33,7 @@ public abstract class BaseServlet extends HttpServlet {
         resp.setContentType("application/json;charset=UTF-8");
         resp.getWriter().write(gson.toJson(map));
     }
+
+
 
 }

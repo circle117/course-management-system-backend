@@ -1,11 +1,11 @@
 package pers.joy.dao.impl;
 
+import org.springframework.stereotype.Repository;
 import pers.joy.entity.User;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
+@Repository
 public class TeacherDaoImpl extends UserDao implements pers.joy.dao.TeacherDao {
 
     private final String tableName = "teacher";
@@ -24,7 +24,7 @@ public class TeacherDaoImpl extends UserDao implements pers.joy.dao.TeacherDao {
     public String queryTNoByTNameAndCCode(String TName, String CCode) {
         String sql = "select teacher.`no` from course inner join teacher on course.tNo = teacher.no " +
                 "where tName = ? and cCode = ?";
-        return (String)queryForSingleValue(sql, TName, CCode);
+        return queryForSingleValue(String.class, TName, CCode);
     }
 
     @Override

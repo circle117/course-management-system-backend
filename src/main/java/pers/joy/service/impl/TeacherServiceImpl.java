@@ -1,19 +1,25 @@
 package pers.joy.service.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import pers.joy.dao.GradeDao;
 import pers.joy.dao.TeacherDao;
-import pers.joy.dao.impl.GradeDaoImpl;
-import pers.joy.dao.impl.TeacherDaoImpl;
 import pers.joy.entity.User;
 import pers.joy.service.TeacherService;
 
 import java.util.List;
 
-
+@Service
 public class TeacherServiceImpl implements TeacherService {
 
-    private final TeacherDao teacherDao = new TeacherDaoImpl();
-    private final GradeDao gradeDao = new GradeDaoImpl();
+    private final TeacherDao teacherDao;
+    private final GradeDao gradeDao;
+
+    @Autowired
+    public TeacherServiceImpl(TeacherDao teacherDao, GradeDao gradeDao) {
+        this.teacherDao = teacherDao;
+        this.gradeDao = gradeDao;
+    }
 
     @Override
     public User signIn(User user) {

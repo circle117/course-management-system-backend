@@ -1,11 +1,13 @@
 package pers.joy.dao.impl;
 
+import org.springframework.stereotype.Repository;
 import pers.joy.dao.GradeDao;
 import pers.joy.entity.Grade;
 import pers.joy.entity.User;
 
 import java.util.List;
 
+@Repository
 public class GradeDaoImpl extends BaseDao implements GradeDao {
     @Override
     public int insertGrade(Grade grade) {
@@ -76,6 +78,6 @@ public class GradeDaoImpl extends BaseDao implements GradeDao {
     @Override
     public String queryGradeSumBySNo(String sNo) {
         String sql = "select count(*) from grade where sNo = ? and grade is null";
-        return String.valueOf(queryForSingleValue(sql, sNo));
+        return queryForSingleValue(String.class, sql, sNo);
     }
 }

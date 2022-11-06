@@ -1,9 +1,9 @@
 package pers.joy.service.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import pers.joy.dao.CourseDao;
 import pers.joy.dao.GradeDao;
-import pers.joy.dao.impl.CourseDaoImpl;
-import pers.joy.dao.impl.GradeDaoImpl;
 import pers.joy.entity.Grade;
 import pers.joy.entity.User;
 import pers.joy.service.GradeService;
@@ -11,10 +11,17 @@ import pers.joy.service.GradeService;
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class GradeServiceImpl implements GradeService {
 
-    private final CourseDao courseDao = new CourseDaoImpl();
-    private final GradeDao gradeDao = new GradeDaoImpl();
+    private final CourseDao courseDao;
+    private final GradeDao gradeDao;
+
+    @Autowired
+    public GradeServiceImpl(CourseDao courseDao, GradeDao gradeDao) {
+        this.courseDao = courseDao;
+        this.gradeDao = gradeDao;
+    }
 
     @Override
     public List<String> selectCourse(List<Grade> gradeList) {

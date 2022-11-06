@@ -1,31 +1,35 @@
 package pers.joy.web;
 
-import com.google.gson.Gson;
-import pers.joy.entity.User;
+import org.springframework.context.ApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 import pers.joy.service.CourseService;
 import pers.joy.service.GradeService;
-import pers.joy.service.TeacherService;
-import pers.joy.service.impl.CourseServiceImpl;
-import pers.joy.service.impl.GradeServiceImpl;
-import pers.joy.service.impl.TeacherServiceImpl;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.*;
 import java.util.List;
 import java.util.Map;
 
 public class TeacherServlet extends BaseServlet {
 
-    private final TeacherService teacherService = new TeacherServiceImpl();
-    private final GradeService gradeService = new GradeServiceImpl();
-    private final CourseService courseService = new CourseServiceImpl();
-    private final Gson gson = new Gson();
+    private GradeService gradeService;
+    private CourseService courseService;
+
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
+        assert context != null;
+        gradeService = context.getBean(GradeService.class);
+        courseService = context.getBean(CourseService.class);
+    }
 
     /**
      * get course name list by teacher No
      */
     protected void courseNameList(HttpServletRequest request, HttpServletResponse resp, Map<String, String> map) {
         String tNo = request.getParameter("no");
-        List<Object> courseNameList = courseService.getCourseNameList(tNo);
+        List<String> courseNameList = courseService.getCourseNameList(tNo);
 
         map.put("courseNameList", gson.toJson(courseNameList));
     }

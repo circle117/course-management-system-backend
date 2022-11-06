@@ -34,7 +34,7 @@ public interface CourseService {
      * @param tNo teacher No
      * @return list of String
      */
-    List<Object> getCourseNameList(String tNo);
+    List<String> getCourseNameList(String tNo);
 
     /**
      * get course list
@@ -52,7 +52,7 @@ public interface CourseService {
      * get all course name list
      * @return list of String
      */
-    List<Object> getAllCourseNameList();
+    List<String> getAllCourseNameList();
 
     /**
      * create course

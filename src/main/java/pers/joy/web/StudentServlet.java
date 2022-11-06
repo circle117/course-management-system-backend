@@ -1,17 +1,13 @@
 package pers.joy.web;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
-import pers.joy.dao.GradeDao;
+import org.springframework.context.ApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 import pers.joy.entity.Grade;
 import pers.joy.service.CourseService;
 import pers.joy.service.GradeService;
-import pers.joy.service.impl.CourseServiceImpl;
-import pers.joy.service.impl.GradeServiceImpl;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,9 +15,17 @@ import java.util.Map;
 
 public class StudentServlet extends BaseServlet{
 
-    private final CourseService courseService = new CourseServiceImpl();
-    private final GradeService gradeService = new GradeServiceImpl();
-    private final Gson gson = new Gson();
+    private CourseService courseService;
+    private GradeService gradeService;
+
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
+        assert context != null;
+        courseService = context.getBean(CourseService.class);
+        gradeService = context.getBean(GradeService.class);
+    }
 
     /**
      * select courses
@@ -33,6 +37,7 @@ public class StudentServlet extends BaseServlet{
         String jsonData = request.getParameter("course");
         List<Grade> gradeList;
         gradeList = gson.fromJson(jsonData, new TypeToken<ArrayList<Grade>>(){}.getType());
+
         for (Grade grade: gradeList) {
             grade.setSNo(sNo);
         }
