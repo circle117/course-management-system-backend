@@ -44,7 +44,7 @@ public interface StudentDao{
      * @param sNo student no
      * @return User class
      */
-    User queryStudentBySNo(String sNo);
+    List<User> queryStudentBySNo(String sNo);
 
     /**
      * create new student

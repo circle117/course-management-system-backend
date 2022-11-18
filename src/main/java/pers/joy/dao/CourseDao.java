@@ -55,10 +55,11 @@ public interface CourseDao {
 
     /**
      * delete course item
-     * @param course Course Object
+     * @param courseCode course code
+     * @param teacherNo teacher number
      * @return if success return 1; else return -1
      */
-    int deleteCourseByCCode(Course course);
+    int deleteCourseByCCodeAndTNo(String courseCode, String teacherNo);
 
     /**
      * update course
@@ -79,7 +80,7 @@ public interface CourseDao {
      * @param courseCode course code (String)
      * @return course or null
      */
-    Course existNoTeacherCourse(String courseCode);
+    List<Course> existNoTeacherCourse(String courseCode);
 
     /**
      * update TNo for existed course item
@@ -102,7 +103,7 @@ public interface CourseDao {
      * @param tNo teacher No
      * @return course object or bull
      */
-    Course queryCourseByCCodeAndTNo(String courseCode, String tNo);
+    List<Course> queryCourseByCCodeAndTNo(String courseCode, String tNo);
 
     /**
      * query course code by course name

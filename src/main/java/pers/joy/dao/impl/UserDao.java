@@ -11,9 +11,9 @@ public abstract class UserDao extends BaseDao {
         return queryForObject(User.class, sql, username, password);
     }
 
-    protected User queryUserByNo(String tableName, String no) {
+    protected List<User> queryUserByNo(String tableName, String no) {
         String sql = String.format("select * from %s where no = ?", tableName);
-        return queryForObject(User.class, sql, no);
+        return queryForList(User.class, sql, no);
     }
 
     protected List<User> queryAllUser(String tableName, int begin, int pageSize) {

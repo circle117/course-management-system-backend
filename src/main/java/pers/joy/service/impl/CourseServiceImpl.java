@@ -65,8 +65,8 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public int deleteCourse(Course course) {
-        return courseDao.deleteCourseByCCode(course);
+    public int deleteCourse(String courseCode, String teacherNo) {
+        return courseDao.deleteCourseByCCodeAndTNo(courseCode, teacherNo);
     }
 
     @Override
@@ -78,7 +78,7 @@ public class CourseServiceImpl implements CourseService {
     public List<String> addTeacher(String courseCode, List<String> teacherList) {
         List<String> failTeacherNo = new ArrayList<>();
         // fill up the empty tNo
-        if (courseDao.existNoTeacherCourse(courseCode) != null) {
+        if (courseDao.existNoTeacherCourse(courseCode).size() == 1) {
             int res = courseDao.updateTNoForExistItem(courseCode, teacherList.get(0));
             if (res<=0) {
                 failTeacherNo.add(teacherList.get(0));
@@ -91,7 +91,7 @@ public class CourseServiceImpl implements CourseService {
         // add new items for other tNo
         Course course = courseDao.queryCourseInfoByCCode(courseCode);
         for (String teacher: teacherList) {
-            if (courseDao.queryCourseByCCodeAndTNo(courseCode, teacher)==null) {
+            if (courseDao.queryCourseByCCodeAndTNo(courseCode, teacher).size() == 0) {
                 course.setTNo(teacher);
                 courseDao.insertCourse(course);
             } else {

@@ -19,7 +19,7 @@ public interface TeacherDao{
      * @param tNo teacher No
      * @return User object or null
      */
-    User queryTeacherByTNo(String tNo);
+    List<User> queryTeacherByTNo(String tNo);
 
     /**
      * query teacher by teacher name and course code

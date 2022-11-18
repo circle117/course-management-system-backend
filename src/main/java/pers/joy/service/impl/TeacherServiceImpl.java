@@ -50,7 +50,7 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public int createTeacher(User teacher) {
-        if (teacherDao.queryTeacherByTNo(teacher.getNo())!=null) {
+        if (teacherDao.queryTeacherByTNo(teacher.getNo()).size()>0) {
             return -1;
         }
         return teacherDao.insertTeacher(teacher);

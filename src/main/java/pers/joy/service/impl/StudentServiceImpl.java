@@ -47,7 +47,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public int createStudent(User student) {
-        if (studentDao.queryStudentBySNo(student.getNo())!=null) {
+        if (studentDao.queryStudentBySNo(student.getNo()).size()>0) {
             return -1;
         }
         return studentDao.insertStudent(student);
