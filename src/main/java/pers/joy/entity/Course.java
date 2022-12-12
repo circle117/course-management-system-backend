@@ -1,8 +1,9 @@
 package pers.joy.entity;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class Course {
+public class Course implements Serializable {
 
     private String cCode;
     private String cName;

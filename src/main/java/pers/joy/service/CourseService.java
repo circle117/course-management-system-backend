@@ -63,10 +63,11 @@ public interface CourseService {
 
     /**
      * delete course-teacher pair
-     * @param course Course object
+     * @param courseCode course code
+     * @param teacherNo teacher no
      * @return 1 or -1
      */
-    int deleteCourse(Course course);
+    int deleteCourse(String courseCode, String teacherNo);
 
     /**
      * edit course information

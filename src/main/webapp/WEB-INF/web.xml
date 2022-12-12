@@ -4,53 +4,71 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
 
-    <!-- context -->
+    <!-- Spring -->
     <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>classpath:applicationContext.xml</param-value>
     </context-param>
+
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
 
-    <!-- Servlet -->
+    <!-- SpringMVC -->
     <servlet>
-        <servlet-name>CommonServlet</servlet-name>
-        <servlet-class>pers.joy.web.CommonServlet</servlet-class>
+        <servlet-name>DispatcherServlet</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>classpath:springMVC.xml</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet-mapping>
-        <servlet-name>CommonServlet</servlet-name>
-        <url-pattern>/common</url-pattern>
+        <servlet-name>DispatcherServlet</servlet-name>
+        <url-pattern>/</url-pattern>
     </servlet-mapping>
 
-    <servlet>
-        <servlet-name>StudentServlet</servlet-name>
-        <servlet-class>pers.joy.web.StudentServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>StudentServlet</servlet-name>
-        <url-pattern>/student</url-pattern>
-    </servlet-mapping>
+    <!-- filter -->
+    <!-- Chinese encoding -->
+    <filter>
+        <filter-name>CharacterEncodingFilter</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+        <init-param>
+            <param-name>forceResponseEncoding</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>CharacterEncodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 
-    <servlet>
-        <servlet-name>TeacherServlet</servlet-name>
-        <servlet-class>pers.joy.web.TeacherServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>TeacherServlet</servlet-name>
-        <url-pattern>/teacher</url-pattern>
-    </servlet-mapping>
+    <!-- RESTFul -->
+    <filter>
+        <filter-name>HiddenHttpMethodFilter</filter-name>
+        <filter-class>org.springframework.web.filter.HiddenHttpMethodFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>HiddenHttpMethodFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 
-    <servlet>
-        <servlet-name>AdministratorServlet</servlet-name>
-        <servlet-class>pers.joy.web.AdministratorServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>AdministratorServlet</servlet-name>
-        <url-pattern>/administrator</url-pattern>
-    </servlet-mapping>
+    <!-- CORS -->
+    <filter>
+        <filter-name>CorsFilter</filter-name>
+        <filter-class>pers.joy.filter.CorsFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>CorsFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 
-    <!--servlet-->
+    <!-- User Authority-->
     <filter>
         <filter-name>AdminFilter</filter-name>
         <filter-class>pers.joy.filter.AdminFilter</filter-class>

@@ -1,9 +1,8 @@
 package pers.joy.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pers.joy.dao.CourseDao;
 import pers.joy.entity.Course;
+import pers.joy.mapper.CourseMapper;
 import pers.joy.service.CourseService;
 
 import java.util.ArrayList;
@@ -11,75 +10,74 @@ import java.util.List;
 
 @Service
 public class CourseServiceImpl implements CourseService {
-    private final CourseDao courseDao;
+    private final CourseMapper courseMapper;
 
-    @Autowired
-    public CourseServiceImpl(CourseDao courseDao) {
-        this.courseDao = courseDao;
+    public CourseServiceImpl(CourseMapper courseMapper) {
+        this.courseMapper = courseMapper;
     }
 
     @Override
     public List<Course> searchByCode(String courseCode, int pageNum, int pageSize) {
         int begin = (pageNum-1)*pageSize;
-        return courseDao.queryCourseByCourseCode(courseCode, begin, pageSize);
+        return courseMapper.queryCourseByCourseCode("%"+courseCode+"%", begin, pageSize);
     }
 
     @Override
     public String getCourseSumByCCode(String courseCode) {
-        return courseDao.queryCourseSumByCCode(courseCode);
+        return courseMapper.queryCourseSumByCourseCode("%"+courseCode+"%");
     }
 
     @Override
     public List<Course> getSelectedCoursesInfo(String sNo, int pageNum, int pageSize) {
         int begin = (pageNum-1)*pageSize;
-        return courseDao.querySelectedCoursesBySNo(sNo, begin, pageSize);
+        return courseMapper.querySelectedCoursesBySNo(sNo, begin, pageSize);
     }
 
     @Override
     public List<String> getCourseNameList(String tNo) {
-        return courseDao.queryCourseNameListForTeacher(tNo);
+        return courseMapper.queryCourseNameListForTeacher(tNo);
     }
 
     @Override
     public List<Course> getCourseList(int pageNum, int pageSize) {
         int begin = (pageNum-1)*pageSize;
-        return courseDao.queryAllCourse(begin, pageSize);
+        return courseMapper.queryAllCourses(begin, pageSize);
     }
 
     @Override
     public String getCourseSum() {
-        return courseDao.queryCourseSum();
+        return courseMapper.queryCourseSum();
     }
 
     @Override
     public List<String> getAllCourseNameList() {
-        return courseDao.queryCourseName();
+        return courseMapper.queryCourseName();
     }
 
     @Override
     public int createCourse(Course course) {
-        if (courseDao.existCourseCode(course.getCCode()).size()>0) {
+        if (courseMapper.existCourseCode(course.getCCode()).size()>0) {
             return -1;
         }
-        return courseDao.insertCourse(course);
+        return courseMapper.insertCourse(course);
     }
 
     @Override
-    public int deleteCourse(Course course) {
-        return courseDao.deleteCourseByCCode(course);
+    public int deleteCourse(String courseCode, String teacherNo) {
+        return courseMapper.deleteCourseByCCodeAndTNo(courseCode, teacherNo);
     }
 
     @Override
     public int editCourse(Course course) {
-        return courseDao.updateCourse(course);
+        return courseMapper.updateCourse(course);
     }
 
     @Override
     public List<String> addTeacher(String courseCode, List<String> teacherList) {
         List<String> failTeacherNo = new ArrayList<>();
         // fill up the empty tNo
-        if (courseDao.existNoTeacherCourse(courseCode) != null) {
-            int res = courseDao.updateTNoForExistItem(courseCode, teacherList.get(0));
+        if (courseMapper.existNoTeacherCourse(courseCode).size() == 1) {
+            int res = courseMapper.updateTNoForExistItem(courseCode, teacherList.get(0));
             if (res<=0) {
                 failTeacherNo.add(teacherList.get(0));
             }
@@ -89,11 +87,11 @@ public class CourseServiceImpl implements CourseService {
             }
         }
         // add new items for other tNo
-        Course course = courseDao.queryCourseInfoByCCode(courseCode);
+        Course course = courseMapper.queryCourseInfoByCCode(courseCode);
         for (String teacher: teacherList) {
-            if (courseDao.queryCourseByCCodeAndTNo(courseCode, teacher)==null) {
+            if (courseMapper.queryCourseByCCodeAndTNo(courseCode, teacher).size() == 0) {
                 course.setTNo(teacher);
-                courseDao.insertCourse(course);
+                courseMapper.insertCourse(course);
             } else {
                 failTeacherNo.add(teacher);
             }

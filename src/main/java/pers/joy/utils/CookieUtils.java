@@ -23,6 +23,7 @@ public class CookieUtils {
         Cookie cookie = new Cookie(key, value);
         cookie.setDomain(domain);
         cookie.setMaxAge(maxAge);
+        cookie.setPath("/");
         resp.addCookie(cookie);
     }
 }

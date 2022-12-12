@@ -1,8 +1,8 @@
 package pers.joy.entity;
 
-import com.alibaba.druid.support.ibatis.SpringIbatisBeanNameAutoProxyCreator;
+import java.io.Serializable;
 
-public class User {
+public class User implements Serializable {
 
     private String no;
     private String name;

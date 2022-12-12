@@ -27,6 +27,14 @@ public interface GradeService {
      */
     List<Grade> getCompletedCourses(String sNo);
 
+
+    /**
+     * get students and grades who completed the course by course name
+     * @param cName course name
+     * @return list of Grade objects
+     */
+    List<Grade> getCompletedCourseStudent(String cName);
+
     /**
      * get students and grades who completed the course by course name
      * @param cName course name
@@ -34,6 +42,14 @@ public interface GradeService {
      * @return list of Grade object
      */
     List<Grade> getCompletedCourseStudent(String cName, String tNo);
+
+
+    /**
+     * get students who are taking the course by course name
+     * @param cName course name
+     * @return list of User objects
+     */
+    List<User> getSelectedCourseStudent(String cName);
 
     /**
      * get students who are taking the course by course name
@@ -51,20 +67,6 @@ public interface GradeService {
      * @return 1 or -1
      */
     int submitGrade(String sNo, String cName, String grade);
-
-    /**
-     * get students and grades who completed the course by course name
-     * @param cName course name
-     * @return list of Grade objects
-     */
-    List<Grade> getCompletedCourseStudent(String cName);
-
-    /**
-     * get students who are taking the course by course name
-     * @param cName course name
-     * @return list of User objects
-     */
-    List<User> getSelectedCourseStudent(String cName);
 
     /**
      * get number of courses a student is taking
