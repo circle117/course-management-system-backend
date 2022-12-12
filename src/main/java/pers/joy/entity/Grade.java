@@ -1,6 +1,9 @@
 package pers.joy.entity;
 
-public class Grade {
+
+import java.io.Serializable;
+
+public class Grade implements Serializable {
 
     private String sNo;
     private String cCode;

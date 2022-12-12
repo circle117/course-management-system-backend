@@ -1,11 +1,10 @@
 package pers.joy.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pers.joy.dao.CourseDao;
-import pers.joy.dao.GradeDao;
 import pers.joy.entity.Grade;
 import pers.joy.entity.User;
+import pers.joy.mapper.CourseMapper;
+import pers.joy.mapper.GradeMapper;
 import pers.joy.service.GradeService;
 
 import java.util.ArrayList;
@@ -14,21 +13,22 @@ import java.util.List;
 @Service
 public class GradeServiceImpl implements GradeService {
 
-    private final CourseDao courseDao;
-    private final GradeDao gradeDao;
+    private final CourseMapper courseMapper;
+    private final GradeMapper gradeMapper;
 
-    @Autowired
-    public GradeServiceImpl(CourseDao courseDao, GradeDao gradeDao) {
-        this.courseDao = courseDao;
-        this.gradeDao = gradeDao;
+    public GradeServiceImpl(CourseMapper courseMapper, GradeMapper gradeMapper) {
+        this.courseMapper = courseMapper;
+        this.gradeMapper = gradeMapper;
     }
 
     @Override
     public List<String> selectCourse(List<Grade> gradeList) {
         List<String> failSelectedCourse = new ArrayList<>();
         for (Grade grade:gradeList) {
-            if (gradeDao.insertGrade(grade)<0) {
+            if (gradeMapper.queryGradeByCCodeAndSNo(grade).size()>0) {
                 failSelectedCourse.add(grade.getCCode());
+            } else {
+                gradeMapper.insertGrade(grade);
             }
         }
         return failSelectedCourse;
@@ -37,45 +37,45 @@ public class GradeServiceImpl implements GradeService {
     @Override
     public void dropCourse(List<Grade> gradeList) {
         for (Grade grade:gradeList) {
-            gradeDao.deleteGrade(grade);
+            gradeMapper.deleteGrade(grade);
         }
     }
 
     @Override
     public List<Grade> getCompletedCourses(String sNo) {
-        return gradeDao.queryCompletedCoursesBySNo(sNo);
-    }
-
-    @Override
-    public List<Grade> getCompletedCourseStudent(String cName, String tNo) {
-        return gradeDao.queryCompletedCourseStudentByCNameAndTeacher(cName, tNo);
-    }
-
-    @Override
-    public List<User> getSelectedCourseStudent(String cName, String tNo) {
-        return gradeDao.querySelectedCourseStudentByCNameAndTeacher(cName, tNo);
-    }
-
-    @Override
-    public int submitGrade(String sNo, String cName, String grade) {
-        String cCode = courseDao.queryCCodeByName(cName);
-        String point = String.valueOf(getPoint(Integer.parseInt(grade)));
-        return gradeDao.updateGrade(sNo, cCode, grade, point);
+        return gradeMapper.queryCompletedCoursesBySNo(sNo);
     }
 
     @Override
     public List<Grade> getCompletedCourseStudent(String cName) {
-        return gradeDao.queryCompletedCourseStudentByCName(cName);
+        return gradeMapper.queryCompletedCourseStudentByCName(cName);
+    }
+
+    @Override
+    public List<Grade> getCompletedCourseStudent(String cName, String tNo) {
+        return gradeMapper.queryCompletedCourseStudentByCNameAndTeacher(cName, tNo);
     }
 
     @Override
     public List<User> getSelectedCourseStudent(String cName) {
-        return gradeDao.querySelectedCourseStudentByCName(cName);
+        return gradeMapper.querySelectedCourseStudentByCName(cName);
+    }
+
+    @Override
+    public List<User> getSelectedCourseStudent(String cName, String tNo) {
+        return gradeMapper.querySelectedCourseStudentByCNameAndTeacher(cName, tNo);
+    }
+
+    @Override
+    public int submitGrade(String sNo, String cName, String grade) {
+        String cCode = courseMapper.queryCCodeByName(cName);
+        String point = String.valueOf(getPoint(Integer.parseInt(grade)));
+        return gradeMapper.updateGrade(sNo, cCode, grade, point);
     }
 
     @Override
     public String getSelectedCourseSum(String sNo) {
-        return gradeDao.queryGradeSumBySNo(sNo);
+        return gradeMapper.queryGradeSumBySNo(sNo);
     }
 
     private float getPoint(int grade) {

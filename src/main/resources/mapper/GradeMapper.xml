@@ -1,0 +1,57 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pers.joy.mapper.GradeMapper">
+
+    <select id="queryCompletedCourseStudentByCName" resultType="Grade">
+        select distinct sNo, grade, point from grade inner join course on grade.cCode=course.cCode
+        where cName = #{cName} and grade is not null
+    </select>
+
+    <select id="queryCompletedCourseStudentByCNameAndTeacher" resultType="Grade">
+        select distinct sNo, grade, point from grade inner join course on grade.cCode=course.cCode
+        where cName = #{cName} and grade is not null and course.tNo = #{tNo}
+    </select>
+
+    <select id="querySelectedCourseStudentByCName" resultType="User">
+        select distinct student.no, student.name from course inner join grade on course.cCode=grade.cCode
+            inner join student on student.no=grade.sNo
+        where grade is null and cName = #{cName}
+    </select>
+
+    <select id="queryGradeByTNo" resultType="Grade">
+        select * from grade where tNo = #{tNo}
+    </select>
+
+    <select id="queryGradeByCCodeAndSNo" resultType="Grade">
+        select * from grade where cCode=#{cCode} and sNo=#{sNo}
+    </select>
+
+    <select id="queryCompletedCoursesBySNo" resultType="Grade">
+        select distinct sNo, grade.cCode, grade, point, course.cName, credit
+        from grade left join course on grade.cCode=course.cCode
+        where sNo = #{sNo} and grade is not null
+    </select>
+
+    <select id="queryGradeSumBySNo" resultType="String">
+        select count(*) from grade where sNo = #{sNo} and grade is null
+    </select>
+
+    <select id="querySelectedCourseStudentByCNameAndTeacher" resultType="User">
+        select distinct student.no, student.name
+        from course inner join grade on course.cCode=grade.cCode inner join student on student.no=grade.sNo
+        where grade is null and cName = #{cName} and grade.tNo = #{tNo}
+    </select>
+
+    <update id="updateGrade">
+        update grade set grade = #{grade}, point = #{point} where sNo = #{sNo} and cCode = #{cCode}
+    </update>
+
+    <insert id="insertGrade">
+        insert into grade(sNo, cCode, tNo) values(#{sNo}, #{cCode}, #{tNo})
+    </insert>
+
+    <delete id="deleteGrade">
+        delete from grade where sNo = #{sNo} and cCode = #{cCode} and tNo = #{tNo}
+    </delete>
+</mapper>

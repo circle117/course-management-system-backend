@@ -4,13 +4,23 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
 
-    <!-- Servlet -->
+    <!-- Spring -->
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath:applicationContext.xml</param-value>
+    </context-param>
+
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+
+    <!-- SpringMVC -->
     <servlet>
         <servlet-name>DispatcherServlet</servlet-name>
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
         <init-param>
             <param-name>contextConfigLocation</param-name>
-            <param-value>classpath:SpringMVC.xml</param-value>
+            <param-value>classpath:springMVC.xml</param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
@@ -20,6 +30,7 @@
     </servlet-mapping>
 
     <!-- filter -->
+    <!-- Chinese encoding -->
     <filter>
         <filter-name>CharacterEncodingFilter</filter-name>
         <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
@@ -37,6 +48,7 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
+    <!-- RESTFul -->
     <filter>
         <filter-name>HiddenHttpMethodFilter</filter-name>
         <filter-class>org.springframework.web.filter.HiddenHttpMethodFilter</filter-class>
@@ -46,6 +58,7 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
+    <!-- CORS -->
     <filter>
         <filter-name>CorsFilter</filter-name>
         <filter-class>pers.joy.filter.CorsFilter</filter-class>
@@ -55,6 +68,7 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
+    <!-- User Authority-->
     <filter>
         <filter-name>AdminFilter</filter-name>
         <filter-class>pers.joy.filter.AdminFilter</filter-class>

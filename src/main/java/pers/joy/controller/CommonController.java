@@ -12,6 +12,7 @@ import pers.joy.service.StudentService;
 import pers.joy.service.TeacherService;
 import pers.joy.utils.CookieUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
@@ -28,7 +29,6 @@ public class CommonController {
     private final static int maxAge = 60 * 60 * 24 * 7;
     private final Gson gson = new Gson();
 
-
     public CommonController(StudentService studentService, TeacherService teacherService,
                             AdministratorService administratorService, CourseService courseService) {
         this.studentService = studentService;
@@ -38,7 +38,8 @@ public class CommonController {
     }
 
     @GetMapping("/signIn/{username}/{password}/{type}")
-    public String signIn(HttpServletResponse resp,
+    public String signIn(HttpServletRequest req,
+                         HttpServletResponse resp,
                          HttpSession session,
                          @PathVariable("username") String username,
                          @PathVariable("password") String password,

@@ -1,0 +1,79 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pers.joy.mapper.CourseMapper">
+    <select id="queryCourseName" resultType="String">
+        select distinct cName from course order by cName
+    </select>
+
+    <select id="queryCCodeByName" resultType="String">
+        select distinct cCode from course where cName = #{cName}
+    </select>
+
+    <select id="existCourseCode" resultType="Course">
+        select * from course where cCode = #{courseCode}
+    </select>
+
+    <select id="queryCourseSum" resultType="String">
+        select count(*) from course
+    </select>
+
+    <select id="queryAllCourses" resultType="Course">
+        select cCode, cName, credit, cDept, tNo from course order by cCode, tNo limit #{begin}, #{pageSize}
+    </select>
+
+    <select id="existNoTeacherCourse" resultType="Course">
+        select distinct * from course where cCode = #{courseCode} and tNo is null
+    </select>
+
+    <select id="queryCourseInfoByCCode" resultType="Course">
+        select distinct cCode, cName, credit, cDept from course where cCode = #{courseCode}
+    </select>
+
+    <select id="queryCourseByCCodeAndTNo" resultType="Course">
+        select * from course where cCode = #{courseCode} and tNo = #{tNo}
+    </select>
+
+    <select id="querySelectedCoursesBySNo" resultType="Course">
+        select course.cCode, cName, credit, cDept, name as tName, course.tNo
+        from grade inner join course on grade.cCode=course.cCode and grade.tNo=course.tNo
+            inner join teacher on course.tNo=teacher.no
+        where sNo = #{sNo} and grade is null order by course.cCode limit #{begin}, #{pageSize}
+    </select>
+
+    <select id="queryCourseSumByCourseCode" resultType="String">
+        select count(*) from course where cCode like #{courseCode}
+    </select>
+
+    <select id="queryCourseByCourseCode" resultType="Course">
+        select cCode, cName, credit, cDept, name as tName, course.tNo
+        from course inner join teacher on course.tNo = teacher.no
+        where cCode like #{courseCode} order by cCode limit #{begin}, #{pageSize}
+    </select>
+
+    <select id="queryCourseNameListForTeacher" resultType="String">
+        select cName from course where tNo = #{tNo} order by cName
+    </select>
+
+    <insert id="insertCourse">
+        insert into course values(#{cCode}, #{cName}, #{credit}, #{cDept}, #{tNo})
+    </insert>
+
+    <update id="updateTNoForExistItem">
+        update course set tNo = #{tNo} where cCode = #{courseCode}
+    </update>
+
+    <update id="updateCourse">
+        update course set cName=#{cName}, credit=#{credit}, cDept=#{cDept} where cCode = #{cCode}
+    </update>
+
+    <delete id="deleteCourseByCCodeAndTNo">
+        delete from course where cCode = #{courseCode} and tNo
+        <if test="teacherNo!=null">
+            = #{teacherNo}
+        </if>
+        <if test="teacherNo==null">
+            is null
+        </if>
+    </delete>
+</mapper>

@@ -3,11 +3,9 @@ package pers.joy.controller;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.springframework.web.bind.annotation.*;
-import pers.joy.entity.Course;
 import pers.joy.entity.Grade;
 import pers.joy.service.CourseService;
 import pers.joy.service.GradeService;
-import pers.joy.service.StudentService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,24 +22,9 @@ public class StudentController {
         this.gradeService = gradeService;
     }
 
-    @GetMapping("/grade/{studentNo}")
-    public String getCompletedCourse(@PathVariable("studentNo") String studentNo) {
-        List<Grade> gradeList = gradeService.getCompletedCourses(studentNo);
-        return gson.toJson(gradeList);
-    }
-
-    @GetMapping("/getGPA/{studentNo}")
-    public String getGPA(@PathVariable("studentNo") String studentNo) {
-        List<Grade> gradeList = gradeService.getCompletedCourses(studentNo);
-        int gradeSum = 0;
-        int creditSum = 0;
-        for(Grade c: gradeList) {
-            gradeSum += c.getGrade()*c.getCredit();
-            creditSum += c.getCredit();
-        }
-        return String.valueOf(Math.round(gradeSum*1.0*100/creditSum)/100.0);
-    }
-
+    /**
+     * select course
+     */
     @PostMapping("/grade/{studentNo}/{jsonCourse}")
     public String selectCourse(@PathVariable("studentNo") String studentNo,
                                @PathVariable("jsonCourse") String jsonCourse) {
@@ -82,5 +65,26 @@ public class StudentController {
 
         gradeService.dropCourse(gradeList);
         return "success";
+    }
+
+    /**
+     * Check completed courses
+     */
+    @GetMapping("/grade/{studentNo}")
+    public String getCompletedCourse(@PathVariable("studentNo") String studentNo) {
+        List<Grade> gradeList = gradeService.getCompletedCourses(studentNo);
+        return gson.toJson(gradeList);
+    }
+
+    @GetMapping("/getGPA/{studentNo}")
+    public String getGPA(@PathVariable("studentNo") String studentNo) {
+        List<Grade> gradeList = gradeService.getCompletedCourses(studentNo);
+        int gradeSum = 0;
+        int creditSum = 0;
+        for(Grade c: gradeList) {
+            gradeSum += c.getGrade()*c.getCredit();
+            creditSum += c.getCredit();
+        }
+        return String.valueOf(Math.round(gradeSum*1.0*100/creditSum)/100.0);
     }
 }
