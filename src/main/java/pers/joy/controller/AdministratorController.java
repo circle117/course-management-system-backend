@@ -5,10 +5,7 @@ import com.google.gson.reflect.TypeToken;
 import org.springframework.web.bind.annotation.*;
 import pers.joy.entity.Course;
 import pers.joy.entity.User;
-import pers.joy.service.CourseService;
-import pers.joy.service.GradeService;
-import pers.joy.service.StudentService;
-import pers.joy.service.TeacherService;
+import pers.joy.service.*;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -20,13 +17,17 @@ public class AdministratorController {
     private final TeacherService teacherService;
     private final GradeService gradeService;
     private final CourseService courseService;
+    private final DepartmentService departmentService;
     private final Gson gson = new Gson();
 
-    public AdministratorController(StudentService studentService, TeacherService teacherService, GradeService gradeService, CourseService courseService) {
+    public AdministratorController(StudentService studentService, TeacherService teacherService,
+                                   GradeService gradeService, CourseService courseService,
+                                   DepartmentService departmentService) {
         this.studentService = studentService;
         this.teacherService = teacherService;
         this.gradeService = gradeService;
         this.courseService = courseService;
+        this.departmentService = departmentService;
     }
 
     /**
@@ -114,7 +115,7 @@ public class AdministratorController {
     @DeleteMapping("/course/{courseCode}/{teacherNo}")
     public String deleteCourse(@PathVariable("courseCode") String courseCode,
                                @PathVariable("teacherNo") String teacherNo) {
-        if ("undefined".equals(teacherNo)) {
+        if ("null".equals(teacherNo)) {
             teacherNo = null;
         }
         int res = courseService.deleteCourse(courseCode, teacherNo);
@@ -186,6 +187,11 @@ public class AdministratorController {
         } else {
             return "fail";
         }
+    }
+
+    @GetMapping("/department")
+    public String getDepartment() {
+        return gson.toJson(departmentService.getDepartmentList());
     }
 
     /**

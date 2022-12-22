@@ -6,7 +6,7 @@ public class User implements Serializable {
 
     private String no;
     private String name;
-    private String department;
+    private Department department;
     private String gender;
     private String birthday;
     private String username;
@@ -26,7 +26,7 @@ public class User implements Serializable {
         return password;
     }
 
-    public String getDepartment() { return department; }
+    public Department getDepartment() { return department; }
 
     public String getGender() { return gender; }
 
@@ -46,7 +46,7 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    public void setDepartment(String department) { this.department = department; }
+    public void setDepartment(Department department) { this.department = department; }
 
     public void setGender(String gender) { this.gender = gender; }
 
@@ -65,7 +65,7 @@ public class User implements Serializable {
                 '}';
     }
 
-    public User(String no, String name, String department, String gender, String birthday, String username, String password) {
+    public User(String no, String name, Department department, String gender, String birthday, String username, String password) {
         this.no = no;
         this.name = name;
         this.department = department;

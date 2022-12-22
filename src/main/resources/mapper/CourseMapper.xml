@@ -2,73 +2,86 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="pers.joy.mapper.CourseMapper">
+
+    <cache/>
+
     <select id="queryCourseName" resultType="String">
-        select distinct cName from course order by cName
+        select distinct name from course order by name
     </select>
 
-    <select id="queryCCodeByName" resultType="String">
-        select distinct cCode from course where cName = #{cName}
+    <select id="queryCodeByName" resultType="String">
+        select distinct code from course where name = #{name}
     </select>
 
     <select id="existCourseCode" resultType="Course">
-        select * from course where cCode = #{courseCode}
+        select * from course where code = #{code}
     </select>
 
     <select id="queryCourseSum" resultType="String">
         select count(*) from course
     </select>
 
-    <select id="queryAllCourses" resultType="Course">
-        select cCode, cName, credit, cDept, tNo from course order by cCode, tNo limit #{begin}, #{pageSize}
+    <select id="queryAllCourses" resultMap="MyCourse">
+        select code, name, credit, department_no, teacher_no from course order by code, teacher_no limit #{begin}, #{pageSize}
     </select>
 
     <select id="existNoTeacherCourse" resultType="Course">
-        select distinct * from course where cCode = #{courseCode} and tNo is null
+        select distinct * from course where code = #{code} and teacher_no is null
     </select>
 
-    <select id="queryCourseInfoByCCode" resultType="Course">
-        select distinct cCode, cName, credit, cDept from course where cCode = #{courseCode}
+    <select id="queryCourseInfoByCode" resultMap="MyCourse">
+        select distinct code, name, credit, department_no from course where code = #{code}
     </select>
 
-    <select id="queryCourseByCCodeAndTNo" resultType="Course">
-        select * from course where cCode = #{courseCode} and tNo = #{tNo}
+    <select id="queryCourseByCodeAndTeacherNo" resultType="Course">
+        select * from course where code = #{code} and teacher_no = #{teacherNo}
     </select>
 
-    <select id="querySelectedCoursesBySNo" resultType="Course">
-        select course.cCode, cName, credit, cDept, name as tName, course.tNo
-        from grade inner join course on grade.cCode=course.cCode and grade.tNo=course.tNo
-            inner join teacher on course.tNo=teacher.no
-        where sNo = #{sNo} and grade is null order by course.cCode limit #{begin}, #{pageSize}
+    <select id="querySelectedCoursesByStudentNo" resultMap="MyCourse">
+        select course.code, course.name, credit, department_no, grade.teacher_no
+        from grade inner join course on grade.course_code=course.code and grade.teacher_no=course.teacher_no
+        where student_no = #{studentNo} and grade is null order by course.code limit #{begin}, #{pageSize}
     </select>
 
-    <select id="queryCourseSumByCourseCode" resultType="String">
-        select count(*) from course where cCode like #{courseCode}
+    <select id="queryCourseSumByCode" resultType="String">
+        select count(*) from course where code like #{code}
     </select>
 
-    <select id="queryCourseByCourseCode" resultType="Course">
-        select cCode, cName, credit, cDept, name as tName, course.tNo
-        from course inner join teacher on course.tNo = teacher.no
-        where cCode like #{courseCode} order by cCode limit #{begin}, #{pageSize}
+    <select id="queryCourseByCode" resultMap="MyCourse">
+        select code, name, credit, course.department_no, teacher_no
+        from course where code like #{code} order by code limit #{begin}, #{pageSize}
+    </select>
+
+    <select id="queryCourseForGrade" resultType="Course">
+        select * from course where code=#{code}
     </select>
 
     <select id="queryCourseNameListForTeacher" resultType="String">
-        select cName from course where tNo = #{tNo} order by cName
+        select name from course where teacher_no = #{tNo} order by name
+    </select>
+
+    <select id="queryMaxCode" resultType="String">
+        select MAX(code) from course where department_no=#{departmentNo}
     </select>
 
     <insert id="insertCourse">
-        insert into course values(#{cCode}, #{cName}, #{credit}, #{cDept}, #{tNo})
+        insert into course values(#{code}, #{name}, #{credit}, #{department.no}, #{teacher.no})
     </insert>
 
-    <update id="updateTNoForExistItem">
-        update course set tNo = #{tNo} where cCode = #{courseCode}
+    <update id="updateTeacherNoForExistItem">
+        update course set teacher_no = #{teacherNo} where code = #{code}
     </update>
 
     <update id="updateCourse">
-        update course set cName=#{cName}, credit=#{credit}, cDept=#{cDept} where cCode = #{cCode}
+        update course set name=#{name}, credit=#{credit}, department_no=#{department.no} where code = #{code}
     </update>
 
-    <delete id="deleteCourseByCCodeAndTNo">
-        delete from course where cCode = #{courseCode} and tNo
+    <update id="updateCourseTeacher">
+        update course set teacher_no = null where code = #{code}
+    </update>
+
+    <delete id="deleteCourseByCodeAndTeacherNo">
+        delete from course where code = #{code} and teacher_no
         <if test="teacherNo!=null">
             = #{teacherNo}
         </if>
@@ -76,4 +89,16 @@
             is null
         </if>
     </delete>
+
+    <resultMap id="MyCourse" type="pers.joy.entity.Course">
+        <result column="code" property="code"/>
+        <result column="name" property="name"/>
+        <result column="credit" property="credit"/>
+        <association property="department"
+                     select="pers.joy.mapper.DepartmentMapper.queryDepartmentByNo"
+                     column="department_no"/>
+        <association property="teacher"
+                     select="pers.joy.mapper.UserMapper.queryTeacherByNo"
+                     column="teacher_no"/>
+    </resultMap>
 </mapper>

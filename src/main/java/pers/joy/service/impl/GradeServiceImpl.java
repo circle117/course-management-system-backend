@@ -25,8 +25,8 @@ public class GradeServiceImpl implements GradeService {
     public List<String> selectCourse(List<Grade> gradeList) {
         List<String> failSelectedCourse = new ArrayList<>();
         for (Grade grade:gradeList) {
-            if (gradeMapper.queryGradeByCCodeAndSNo(grade).size()>0) {
-                failSelectedCourse.add(grade.getCCode());
+            if (gradeMapper.queryGradeByCodeAndStudentNo(grade)!=null) {
+                failSelectedCourse.add(grade.getCourse().getCode());
             } else {
                 gradeMapper.insertGrade(grade);
             }
@@ -35,15 +35,17 @@ public class GradeServiceImpl implements GradeService {
     }
 
     @Override
-    public void dropCourse(List<Grade> gradeList) {
+    public int dropCourse(List<Grade> gradeList) {
+        int cnt = 0;
         for (Grade grade:gradeList) {
-            gradeMapper.deleteGrade(grade);
+            cnt += gradeMapper.deleteGrade(grade);
         }
+        return cnt;
     }
 
     @Override
     public List<Grade> getCompletedCourses(String sNo) {
-        return gradeMapper.queryCompletedCoursesBySNo(sNo);
+        return gradeMapper.queryCompletedCoursesByStudentNo(sNo);
     }
 
     @Override
@@ -68,14 +70,14 @@ public class GradeServiceImpl implements GradeService {
 
     @Override
     public int submitGrade(String sNo, String cName, String grade) {
-        String cCode = courseMapper.queryCCodeByName(cName);
+        String cCode = courseMapper.queryCodeByName(cName);
         String point = String.valueOf(getPoint(Integer.parseInt(grade)));
         return gradeMapper.updateGrade(sNo, cCode, grade, point);
     }
 
     @Override
     public String getSelectedCourseSum(String sNo) {
-        return gradeMapper.queryGradeSumBySNo(sNo);
+        return gradeMapper.queryGradeSumByStudentNo(sNo);
     }
 
     private float getPoint(int grade) {

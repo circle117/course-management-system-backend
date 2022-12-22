@@ -3,55 +3,67 @@
 
 <mapper namespace="pers.joy.mapper.GradeMapper">
 
+    <cache/>
+
     <select id="queryCompletedCourseStudentByCName" resultType="Grade">
-        select distinct sNo, grade, point from grade inner join course on grade.cCode=course.cCode
-        where cName = #{cName} and grade is not null
+        select distinct student_no, grade, point from grade inner join course on grade.course_code=course.code
+        where name = #{courseName} and grade is not null
     </select>
 
     <select id="queryCompletedCourseStudentByCNameAndTeacher" resultType="Grade">
-        select distinct sNo, grade, point from grade inner join course on grade.cCode=course.cCode
-        where cName = #{cName} and grade is not null and course.tNo = #{tNo}
+        select distinct student_no , grade, point from grade inner join course on grade.course_code=course.code
+        where name = #{courseName} and grade is not null and course.teacher_no = #{teacherNo}
     </select>
 
     <select id="querySelectedCourseStudentByCName" resultType="User">
-        select distinct student.no, student.name from course inner join grade on course.cCode=grade.cCode
-            inner join student on student.no=grade.sNo
-        where grade is null and cName = #{cName}
-    </select>
-
-    <select id="queryGradeByTNo" resultType="Grade">
-        select * from grade where tNo = #{tNo}
-    </select>
-
-    <select id="queryGradeByCCodeAndSNo" resultType="Grade">
-        select * from grade where cCode=#{cCode} and sNo=#{sNo}
-    </select>
-
-    <select id="queryCompletedCoursesBySNo" resultType="Grade">
-        select distinct sNo, grade.cCode, grade, point, course.cName, credit
-        from grade left join course on grade.cCode=course.cCode
-        where sNo = #{sNo} and grade is not null
-    </select>
-
-    <select id="queryGradeSumBySNo" resultType="String">
-        select count(*) from grade where sNo = #{sNo} and grade is null
+        select distinct student.no, student.name
+        from course inner join grade on course.code=grade.course_code inner join student on student.no=grade.student_no
+        where grade is null and course.name = #{courseName}
     </select>
 
     <select id="querySelectedCourseStudentByCNameAndTeacher" resultType="User">
         select distinct student.no, student.name
-        from course inner join grade on course.cCode=grade.cCode inner join student on student.no=grade.sNo
-        where grade is null and cName = #{cName} and grade.tNo = #{tNo}
+        from course inner join grade on course.code=grade.course_code inner join student on student.no=grade.student_no
+        where grade is null and course.name = #{courseName} and course.teacher_no = #{teacherNo}
+    </select>
+
+    <select id="queryGradeByTNo" resultType="Grade">
+        select * from grade where teacher_no = #{teacherNo}
+    </select>
+
+    <select id="queryGradeByCodeAndStudentNo" resultType="Grade">
+        select * from grade where course_code=#{course.code} and student_no=#{studentNo}
+    </select>
+
+    <select id="queryCompletedCoursesByStudentNo" resultMap="MyGrade">
+        select * from grade
+        where student_no = #{studentNo} and grade is not null
+    </select>
+
+    <select id="queryGradeSumByStudentNo" resultType="String">
+        select count(*) from grade where student_no = #{studentNo} and grade is null
     </select>
 
     <update id="updateGrade">
-        update grade set grade = #{grade}, point = #{point} where sNo = #{sNo} and cCode = #{cCode}
+        update grade set grade = #{grade}, point = #{point}
+        where student_no = #{studentNo} and course_code = #{courseCode}
     </update>
 
     <insert id="insertGrade">
-        insert into grade(sNo, cCode, tNo) values(#{sNo}, #{cCode}, #{tNo})
+        insert into grade(student_no, course_code, teacher_no) values(#{studentNo}, #{course.code}, #{teacherNo})
     </insert>
 
     <delete id="deleteGrade">
-        delete from grade where sNo = #{sNo} and cCode = #{cCode} and tNo = #{tNo}
+        delete from grade where student_no = #{studentNo} and course_code = #{course.code} and teacher_no = #{teacherNo}
     </delete>
+
+    <resultMap id="MyGrade" type="pers.joy.entity.Grade">
+        <result column="student_no" property="studentNo"/>
+        <result column="teacher_no" property="teacherNo"/>
+        <result column="grade" property="grade"/>
+        <result column="point" property="point"/>
+        <association property="course"
+                     select="pers.joy.mapper.CourseMapper.queryCourseForGrade"
+                     column="course_code"/>
+    </resultMap>
 </mapper>

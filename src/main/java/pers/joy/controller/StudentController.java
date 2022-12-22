@@ -3,6 +3,7 @@ package pers.joy.controller;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.springframework.web.bind.annotation.*;
+import pers.joy.entity.Course;
 import pers.joy.entity.Grade;
 import pers.joy.service.CourseService;
 import pers.joy.service.GradeService;
@@ -28,10 +29,11 @@ public class StudentController {
     @PostMapping("/grade/{studentNo}/{jsonCourse}")
     public String selectCourse(@PathVariable("studentNo") String studentNo,
                                @PathVariable("jsonCourse") String jsonCourse) {
-        List<Grade> gradeList = gson.fromJson(jsonCourse, new TypeToken<ArrayList<Grade>>(){}.getType());
+        List<Course> courseList = gson.fromJson(jsonCourse, new TypeToken<ArrayList<Course>>(){}.getType());
+        List<Grade> gradeList = new ArrayList<>();
 
-        for (Grade grade: gradeList) {
-            grade.setSNo(studentNo);
+        for (Course course: courseList) {
+            gradeList.add(new Grade(studentNo, new Course(course.getCode()), course.getTeacher().getNo()));
         }
 
         List<String> res = gradeService.selectCourse(gradeList);
@@ -58,13 +60,18 @@ public class StudentController {
     @DeleteMapping("/grade/{studentNo}/{jsonGrade}")
     public String dropCourse(@PathVariable("studentNo") String studentNo,
                              @PathVariable("jsonGrade") String jsonGrade) {
-        List<Grade> gradeList = gson.fromJson(jsonGrade, new TypeToken<ArrayList<Grade>>(){}.getType());
-        for (Grade grade: gradeList) {
-            grade.setSNo(studentNo);
+        List<Course> courseList = gson.fromJson(jsonGrade, new TypeToken<ArrayList<Course>>(){}.getType());
+        List<Grade> gradeList = new ArrayList<>();
+
+        for (Course course: courseList) {
+            gradeList.add(new Grade(studentNo, course, course.getTeacher().getNo()));
         }
 
-        gradeService.dropCourse(gradeList);
-        return "success";
+        if (gradeService.dropCourse(gradeList)>0) {
+            return "success";
+        } else {
+            return "fail";
+        }
     }
 
     /**
@@ -81,9 +88,9 @@ public class StudentController {
         List<Grade> gradeList = gradeService.getCompletedCourses(studentNo);
         int gradeSum = 0;
         int creditSum = 0;
-        for(Grade c: gradeList) {
-            gradeSum += c.getGrade()*c.getCredit();
-            creditSum += c.getCredit();
+        for(Grade g: gradeList) {
+            gradeSum += g.getGrade()*g.getCourse().getCredit();
+            creditSum += g.getCourse().getCredit();
         }
         return String.valueOf(Math.round(gradeSum*1.0*100/creditSum)/100.0);
     }

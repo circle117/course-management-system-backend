@@ -1,23 +1,21 @@
 package pers.joy.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pers.joy.entity.User;
-import pers.joy.mapper.AdministratorMapper;
+import pers.joy.mapper.UserMapper;
 import pers.joy.service.AdministratorService;
 
 @Service
 public class AdministratorServiceImpl implements AdministratorService {
 
-    private final AdministratorMapper administratorMapper;
+    private final UserMapper userMapper;
 
-    @Autowired
-    public AdministratorServiceImpl(AdministratorMapper administratorMapper) {
-        this.administratorMapper = administratorMapper;
+    public AdministratorServiceImpl(UserMapper userMapper) {
+        this.userMapper = userMapper;
     }
 
     @Override
     public User signIn(User user) {
-        return administratorMapper.queryUserByUsernameAndPassword(user);
+        return userMapper.queryUserByUsernameAndPassword("administrator", user);
     }
 }

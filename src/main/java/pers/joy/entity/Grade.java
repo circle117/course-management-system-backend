@@ -5,90 +5,78 @@ import java.io.Serializable;
 
 public class Grade implements Serializable {
 
-    private String sNo;
-    private String cCode;
-    private String tNo;
+    private String studentNo;
+    private Course course;
+    private String teacherNo;
     private float grade;
     private float point;
-    private String cName;
-    private int credit;
-
-    public String getSNo() {
-        return sNo;
-    }
-
-    public void setSNo(String sNo) {
-        this.sNo = sNo;
-    }
-
-    public String getCCode() {
-        return cCode;
-    }
-
-    public void setCCode(String cCode) {
-        this.cCode = cCode;
-    }
-
-    public String getTNo() {
-        return tNo;
-    }
-
-    public void setTNo(String tNo) {
-        this.tNo = tNo;
-    }
-
-    public float getGrade() { return grade; }
-
-    public void setGrade(float grade) { this.grade = grade; }
-
-    public float getPoint() { return point; }
-
-    public void setPoint(float point) { this.point = point; }
-
-    public String getCName() {
-        return cName;
-    }
-
-    public void setCName(String cName) {
-        this.cName = cName;
-    }
-
-    public int getCredit() {
-        return credit;
-    }
-
-    public void setCredit(int credit) {
-        this.credit = credit;
-    }
-
-    public Grade(String sNo, String cCode, float grade, float point, String cName, int credit) {
-        this.sNo = sNo;
-        this.cCode = cCode;
-        this.grade = grade;
-        this.point = point;
-        this.cName = cName;
-        this.credit = credit;
-    }
-
-    public Grade(String sNo, String cCode, String tNo) {
-        this.sNo = sNo;
-        this.cCode = cCode;
-        this.tNo = tNo;
-    }
 
     public Grade() {
     }
 
+    public Grade(String studentNo, Course course, String teacherNo, float grade, float point) {
+        this.studentNo = studentNo;
+        this.course = course;
+        this.teacherNo = teacherNo;
+        this.grade = grade;
+        this.point = point;
+    }
+
+    public Grade(String studentNo, Course course, String teacherNo) {
+        this.studentNo = studentNo;
+        this.course = course;
+        this.teacherNo = teacherNo;
+    }
+
     @Override
     public String toString() {
-        return "SelectCourse{" +
-                "sNo='" + sNo + '\'' +
-                ", cCode='" + cCode + '\'' +
-                ", tNo='" + tNo + '\'' +
+        return "Grade{" +
+                "studentNo='" + studentNo + '\'' +
+                ", course='" + course + '\'' +
+                ", teacherNo='" + teacherNo + '\'' +
                 ", grade=" + grade +
                 ", point=" + point +
-                ", cName='" + cName + '\'' +
-                ", credit=" + credit +
                 '}';
     }
+
+    public void setStudentNo(String studentNo) {
+        this.studentNo = studentNo;
+    }
+
+    public void setCourseCode(Course course) {
+        this.course = course;
+    }
+
+    public void setTeacherNo(String teacherNo) {
+        this.teacherNo = teacherNo;
+    }
+
+    public void setGrade(float grade) {
+        this.grade = grade;
+    }
+
+    public void setPoint(float point) {
+        this.point = point;
+    }
+
+    public String getStudentNo() {
+        return studentNo;
+    }
+
+    public Course getCourse() {
+        return course;
+    }
+
+    public String getTeacherNo() {
+        return teacherNo;
+    }
+
+    public float getGrade() {
+        return grade;
+    }
+
+    public float getPoint() {
+        return point;
+    }
+
 }
