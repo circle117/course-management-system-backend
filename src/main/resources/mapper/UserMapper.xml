@@ -1,0 +1,69 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pers.joy.mapper.UserMapper">
+
+    <cache/>
+
+    <select id="queryUserByUsernameAndPassword" resultType="User">
+        select no, name from ${type} where username=#{user.username} and password=#{user.password}
+    </select>
+
+    <select id="queryUserSum" resultType="String">
+        select count(*) from ${type}
+    </select>
+
+    <select id="queryAllUser" resultMap="MyUser">
+        select * from ${type} order by no limit #{begin}, #{pageSize}
+    </select>
+
+    <select id="queryUserSumByName" resultType="String">
+        select count(*) from ${type} where name like #{name}
+    </select>
+
+    <select id="queryUserByName" resultMap="MyUser">
+        select * from ${type} where name like #{name} order by no limit #{begin}, #{pageSize}
+    </select>
+
+    <select id="queryTeacherByNo" resultMap="MyUser">
+        select * from teacher where no = #{no}
+    </select>
+
+    <select id="queryMaxNo" resultType="String">
+        select MAX(no) from ${type} where no like #{prefix}
+    </select>
+
+    <select id="queryMaxUsername" resultType="String">
+        select MAX(username) from (select username from student
+        union select username from teacher
+        union select username from administrator) a
+        where username like #{username}
+    </select>
+
+    <insert id="insertUser">
+        insert into ${type} values(#{user.no},#{user.name},#{user.department.no},
+                                   #{user.gender},#{user.birthday},#{user.username},#{user.password})
+    </insert>
+
+    <update id="updateUser">
+        update ${type}
+        set name=#{user.name}, department_no=#{user.department.no}, gender=#{user.gender}, birthday=#{user.birthday}
+        where no = #{user.no}
+    </update>
+
+    <delete id="deleteUser">
+        delete from ${type} where no = #{no}
+    </delete>
+
+    <resultMap id="MyUser" type="pers.joy.entity.User">
+        <id column="no" property="no"/>
+        <result column="name" property="name"/>
+        <result column="gender" property="gender"/>
+        <result column="birthday" property="birthday"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <association property="department"
+                     select="pers.joy.mapper.DepartmentMapper.queryDepartmentByNo"
+                     column="department_no"/>
+    </resultMap>
+</mapper>

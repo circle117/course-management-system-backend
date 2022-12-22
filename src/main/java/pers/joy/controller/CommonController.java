@@ -38,8 +38,7 @@ public class CommonController {
     }
 
     @GetMapping("/signIn/{username}/{password}/{type}")
-    public String signIn(HttpServletRequest req,
-                         HttpServletResponse resp,
+    public String signIn(HttpServletResponse resp,
                          HttpSession session,
                          @PathVariable("username") String username,
                          @PathVariable("password") String password,

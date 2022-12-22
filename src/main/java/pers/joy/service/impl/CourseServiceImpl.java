@@ -2,8 +2,10 @@ package pers.joy.service.impl;
 
 import org.springframework.stereotype.Service;
 import pers.joy.entity.Course;
+import pers.joy.entity.User;
 import pers.joy.mapper.CourseMapper;
 import pers.joy.service.CourseService;
+import pers.joy.utils.DatabaseUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,18 +21,18 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public List<Course> searchByCode(String courseCode, int pageNum, int pageSize) {
         int begin = (pageNum-1)*pageSize;
-        return courseMapper.queryCourseByCourseCode("%"+courseCode+"%", begin, pageSize);
+        return courseMapper.queryCourseByCode("%"+courseCode+"%", begin, pageSize);
     }
 
     @Override
     public String getCourseSumByCCode(String courseCode) {
-        return courseMapper.queryCourseSumByCourseCode("%"+courseCode+"%");
+        return courseMapper.queryCourseSumByCode("%"+courseCode+"%");
     }
 
     @Override
     public List<Course> getSelectedCoursesInfo(String sNo, int pageNum, int pageSize) {
         int begin = (pageNum-1)*pageSize;
-        return courseMapper.querySelectedCoursesBySNo(sNo, begin, pageSize);
+        return courseMapper.querySelectedCoursesByStudentNo(sNo, begin, pageSize);
     }
 
     @Override
@@ -56,15 +58,23 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public int createCourse(Course course) {
-        if (courseMapper.existCourseCode(course.getCCode()).size()>0) {
-            return -1;
+        String currentMaxCode = courseMapper.queryMaxCode(course.getDepartment().getNo());
+        if (currentMaxCode==null) {
+            currentMaxCode = course.getDepartment().getNo()+"0000";
         }
+        String nextCode = DatabaseUtils.generateNo(currentMaxCode);
+        course.setCode(nextCode);
         return courseMapper.insertCourse(course);
     }
 
     @Override
     public int deleteCourse(String courseCode, String teacherNo) {
-        return courseMapper.deleteCourseByCCodeAndTNo(courseCode, teacherNo);
+        int count = Integer.parseInt(courseMapper.queryCourseSumByCode(courseCode));
+        if (count==1) {
+            return courseMapper.updateCourseTeacher(courseCode);
+        } else {
+            return courseMapper.deleteCourseByCodeAndTeacherNo(courseCode, teacherNo);
+        }
     }
 
     @Override
@@ -77,7 +87,7 @@ public class CourseServiceImpl implements CourseService {
         List<String> failTeacherNo = new ArrayList<>();
         // fill up the empty tNo
         if (courseMapper.existNoTeacherCourse(courseCode).size() == 1) {
-            int res = courseMapper.updateTNoForExistItem(courseCode, teacherList.get(0));
+            int res = courseMapper.updateTeacherNoForExistItem(courseCode, teacherList.get(0));
             if (res<=0) {
                 failTeacherNo.add(teacherList.get(0));
             }
@@ -86,11 +96,11 @@ public class CourseServiceImpl implements CourseService {
                 return failTeacherNo;
             }
         }
-        // add new items for other tNo
-        Course course = courseMapper.queryCourseInfoByCCode(courseCode);
+        // add new items for other teacher No
+        Course course = courseMapper.queryCourseInfoByCode(courseCode);
         for (String teacher: teacherList) {
-            if (courseMapper.queryCourseByCCodeAndTNo(courseCode, teacher).size() == 0) {
-                course.setTNo(teacher);
+            if (courseMapper.queryCourseByCodeAndTeacherNo(courseCode, teacher).size() == 0) {
+                course.setTeacher(new User(teacher, null));
                 courseMapper.insertCourse(course);
             } else {
                 failTeacherNo.add(teacher);

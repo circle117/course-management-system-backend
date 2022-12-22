@@ -18,7 +18,7 @@ public interface GradeService {
      * drop courses
      * @param gradeList list of couses wanted to drop
      */
-    void dropCourse(List<Grade> gradeList);
+    int dropCourse(List<Grade> gradeList);
 
     /**
      * get completed courses
@@ -26,7 +26,6 @@ public interface GradeService {
      * @return list of completed courses
      */
     List<Grade> getCompletedCourses(String sNo);
-
 
     /**
      * get students and grades who completed the course by course name
